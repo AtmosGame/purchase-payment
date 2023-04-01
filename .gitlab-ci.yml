@@ -1,6 +1,6 @@
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  POSTGRES_DB: postgres
+  POSTGRES_DB: atmos
   POSTGRES_HOST: postgres
   POSTGRES_PORT: 5432
   POSTGRES_USER: postgres
@@ -82,7 +82,8 @@ Publish:
   tags:
     - dind
   only:
-    - master
+    - main
+    - feature/deployment
 
 
 
@@ -99,4 +100,5 @@ Deploy:
       docker image rm -f $REGISTRY_USER/$IMAGE_NAME:$IMAGE_TAG || true &&
       docker run --name $CONTAINER_NAME -d -p 80:8080 $REGISTRY_USER/$IMAGE_NAME:$IMAGE_TAG"
   only:
-    - master
+    - main
+    - feature/deployment
