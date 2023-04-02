@@ -1,0 +1,53 @@
+SonarQube plugins:
+  - CVS 1.1.1 (scmcvs)
+  - CSS Code Quality and Security 1.4.2.2002 (cssfamily)
+  - PMD 3.3.1 (pmd)
+  - Ansible Lint 2.5.0 (ansible)
+  - Scala Code Quality and Security 1.8.3.2219 (sonarscala)
+  - C# Code Quality and Security 8.22.0.31243 (csharp)
+  - Java Code Quality and Security 6.15.1.26025 (java)
+  - HTML Code Quality and Security 3.4.0.2754 (web)
+  - Flex Code Quality and Security 2.6.1.2564 (flex)
+  - XML Code Quality and Security 2.2.0.2973 (xml)
+  - VB.NET Code Quality and Security 8.22.0.31243 (vbnet)
+  - YAML Analyzer 1.6.0 (yaml)
+  - Python Code Quality and Security 3.4.1.8066 (python)
+  - Code Smells 4.0.0 (smells)
+  - Go Code Quality and Security 1.8.3.2219 (go)
+  - JaCoCo 1.1.1.1157 (jacoco)
+  - Kotlin Code Quality and Security 1.8.3.2219 (kotlin)
+  - Mercurial 1.1.2 (scmmercurial)
+  - ShellCheck Analyzer 2.4.0 (shellcheck)
+  - JavaScript/TypeScript Code Quality and Security 7.4.4.15624 (javascript)
+  - Ruby Code Quality and Security 1.8.3.2219 (ruby)
+  - Findbugs 4.0.4 (findbugs)
+  - Codehawk Java 1.5 (codehawk)
+  - PHP Code Quality and Security 3.17.0.7439 (php)
+Global server settings:
+  - email.from=noreply@cs.ui.ac.id
+  - email.smtp_host.secured=******
+  - sonar.auth.gitlab.applicationId.secured=******
+  - sonar.auth.gitlab.enabled=true
+  - sonar.auth.gitlab.groupsSync=true
+  - sonar.auth.gitlab.secret.secured=******
+  - sonar.auth.gitlab.url=https://gitlab.cs.ui.ac.id
+  - sonar.core.id=FB4B1083-AXiyACNLHXLylbnb2KAB
+  - sonar.core.serverBaseURL=https://sonarqube.cs.ui.ac.id
+  - sonar.core.startTime=2023-03-16T16:25:19+0700
+  - sonar.cs.roslyn.ignoreIssues=false
+  - sonar.forceAuthentication=true
+  - sonar.lf.enableGravatar=true
+  - sonar.lf.logoUrl=https://cs.ui.ac.id/wp-content/uploads/2019/11/logo-fasilkom.jpg
+  - sonar.plugins.risk.consent=ACCEPTED
+Project server settings:
+Project scanner properties:
+  - sonar.host.url=https://sonarqube.cs.ui.ac.id
+  - sonar.login=******
+  - sonar.projectBaseDir=C:\Users\Dhafin\Documents\Kuliah\Semester 4\Adpro\TK\purchase-payment
+  - sonar.projectKey=atmos_purchase-payment_AYc84QdDSUPdlmizh_9z
+  - sonar.scanner.app=ScannerCLI
+  - sonar.scanner.appVersion=4.8.0.2856
+  - sonar.sourceEncoding=windows-1252
+  - sonar.sources=.
+  - sonar.verbose=true
+  - sonar.working.directory=C:\Users\Dhafin\Documents\Kuliah\Semester 4\Adpro\TK\purchase-payment\.scannerwork
