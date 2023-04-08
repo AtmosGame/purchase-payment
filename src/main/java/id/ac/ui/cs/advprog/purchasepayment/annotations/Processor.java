@@ -10,5 +10,5 @@ import java.lang.annotation.RetentionPolicy;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Component
-public @interface RequestProcessor {
+public @interface Processor {
 }
