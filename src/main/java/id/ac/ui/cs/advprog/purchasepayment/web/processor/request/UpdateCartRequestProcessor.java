@@ -2,8 +2,8 @@ package id.ac.ui.cs.advprog.purchasepayment.web.processor.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.Processor;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.validation.UpdateCartRequestValidator.UpdateCartRequestValidatorFactory;
-import id.ac.ui.cs.advprog.purchasepayment.validation.UpdateCartRequestValidator.UpdateCartRequestValidatorFactoryImpl;
+import id.ac.ui.cs.advprog.purchasepayment.validation.updatecartrequestvalidator.UpdateCartRequestValidatorFactory;
+import id.ac.ui.cs.advprog.purchasepayment.validation.updatecartrequestvalidator.UpdateCartRequestValidatorFactoryImpl;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 import jakarta.annotation.PostConstruct;
 
