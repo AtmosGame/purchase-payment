@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class PurchaseAndPaymentController {
-    private final PurchaseAndPaymentLogic<UpdateCartRequest> updateCartLogic;
+    private final PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
 
     @GetMapping("/test")
     public ResponseEntity<String> sayTest() {

@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 
 @Logic
 @RequiredArgsConstructor
-public class UpdateCartLogic implements PurchaseAndPaymentLogic<UpdateCartRequest>{
+public class UpdateCartLogic implements PurchaseAndPaymentLogic<UpdateCartRequest, Void>{
     private final RequestProcessor<UpdateCartRequest> updateCartRequestProcessor;
-    private final UpdateCart updateCartimpl;
+    private final UpdateCart updateCartImpl;
 
     @Override
-    public void processLogic(UpdateCartRequest request) {
+    public Void processLogic(UpdateCartRequest request) {
         updateCartRequestProcessor.validate(request);
-        updateCartimpl.update(request);
+        updateCartImpl.update(request);
+        return null;
     }
 }

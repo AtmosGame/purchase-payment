@@ -1,9 +1,9 @@
-package id.ac.ui.cs.advprog.purchasepayment.validation.updatecartrequestvalidator;
+package id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 
-public class AppNotInListValidator extends Validator<UpdateCartRequest> {
+public class UpdateCartRequestDataValidator extends Validator<UpdateCartRequest> {
     @Override
     public boolean isValid(UpdateCartRequest request) {
         // TODO: implement method
