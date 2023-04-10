@@ -17,12 +17,8 @@ class PurchasePaymentApplicationTests {
     @Autowired
     private DummyController myController;
 
-    @Autowired
-    private ApplicationContext applicationContext;
-
     @Test
     void contextLoads() {
         assertThat(myController).isNotNull();
-        System.out.println(applicationContext.getBean(DummyController.class));
     }
 }
