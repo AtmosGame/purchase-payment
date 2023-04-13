@@ -9,7 +9,9 @@ import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 public class CheckPurchasedResponseProcessor implements ResponseProcessor<CheckPurchasedResponse, Boolean> {
     private Validator<CheckPurchasedResponse> validator = new CheckPurchasedResponseValidator();
 
-    public Boolean process(CheckPurchasedResponse request) {
-        return validator.isValid(request);
+
+    @Override
+    public Boolean process(CheckPurchasedResponse response) {
+        return validator.isValid(response);
     }
 }
