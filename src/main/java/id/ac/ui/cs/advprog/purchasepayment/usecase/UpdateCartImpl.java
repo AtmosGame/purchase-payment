@@ -46,8 +46,8 @@ public class UpdateCartImpl implements UpdateCart {
                     .appName(request.getName())
                     .addDate(new Date())
                     .appPrice(request.getPrice())
+                    .cart(cart)
                     .build();
-            cartDetails.setCart(cart);
             return cartDetailsRepository.save(cartDetails);
         } else {
             // TODO: change to appropriate exception
