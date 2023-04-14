@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
+import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;
 import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
@@ -19,7 +20,7 @@ public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
     private final PurchaseAndPaymentLogic<CheckPurchasedRequest, Void> checkPurchasedLogic;
     private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
-    private final ResponseProcessor<CheckPurchasedRequest, Boolean> checkPurchasedResponseProcessor;
+    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
     private final CheckPurchasedApp checkPurchasedAppImpl;
 
     @GetMapping("/test")
@@ -40,4 +41,5 @@ public class PurchaseAndPaymentController {
         boolean isPurchased = logic.getIsPurchased();
         return new ResponseEntity<>(isPurchased,HttpStatus.OK);
     }
+
 }

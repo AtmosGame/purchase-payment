@@ -28,4 +28,5 @@ public class CheckPurchasedLogic implements PurchaseAndPaymentLogic<CheckPurchas
     public Boolean getIsPurchased() {
         return isPurchased;
     }
+
 }
