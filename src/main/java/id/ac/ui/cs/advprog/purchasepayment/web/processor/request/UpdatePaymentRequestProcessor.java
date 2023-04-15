@@ -6,13 +6,15 @@ import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 import id.ac.ui.cs.advprog.purchasepayment.validation.updatepayment.request.UpdatePaymentRequestFactory;
 import id.ac.ui.cs.advprog.purchasepayment.validation.updatepayment.request.UpdatePaymentRequestFactoryImpl;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 
 @Processor
+@Getter
 public class UpdatePaymentRequestProcessor implements RequestProcessor<UpdatePaymentRequest>{
     private Validator<UpdatePaymentRequest> validator;
 
     @PostConstruct
-    private void init() {
+    public void init() {
         UpdatePaymentRequestFactory factory = new UpdatePaymentRequestFactoryImpl();
         Validator<UpdatePaymentRequest> secretTokenValidator = factory.createSecretTokenValidator();
         Validator<UpdatePaymentRequest> checkoutNotExpiredValidator = factory.createCheckoutNotExpiredValidator();

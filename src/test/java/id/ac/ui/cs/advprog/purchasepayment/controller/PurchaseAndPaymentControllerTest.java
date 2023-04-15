@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,9 @@ class PurchaseAndPaymentControllerTest {
     @MockBean
     private PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
 
+    @MockBean
+    private PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
+
     @Test
     void testGetTest() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/api/v1/test"))
@@ -54,5 +58,20 @@ class PurchaseAndPaymentControllerTest {
                 .andExpect(status().isOk());
 
         verify(updateCartLogic, times(1)).processLogic(updateCartRequest);
+    }
+
+    @Test
+    void testUpdatePayment() throws Exception {
+        UpdatePaymentRequest updatePaymentRequest = UpdatePaymentRequest.builder()
+                .id("<checkout_id>")
+                .token("<secret_token>")
+                .build();
+
+        mockMvc.perform(put("/api/v1/payment")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(updatePaymentRequest)))
+                .andExpect(status().isOk());
+
+        verify(updatePaymentLogic, times(1)).processLogic(updatePaymentRequest);
     }
 }

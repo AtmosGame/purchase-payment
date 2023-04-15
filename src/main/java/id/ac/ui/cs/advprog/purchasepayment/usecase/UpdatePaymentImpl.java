@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UpdatePaymentImpl implements UpdatePayment{
     @Override
-    public void updatePayment(String checkoutId) {
+    public void update(String checkoutId) {
         // TODO: implement
     }
 }
