@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
+import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
+    private final PurchaseAndPaymentLogic<AddSecretTokenRequest, Void> addSecretTokenLogic;
     private final PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
 
@@ -26,6 +28,12 @@ public class PurchaseAndPaymentController {
     public ResponseEntity<Void> updateCart(@RequestBody UpdateCartRequest request) {
         updateCartLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/add-token")
+    public ResponseEntity<Void> addToken(@RequestBody AddSecretTokenRequest request) {
+        addSecretTokenLogic.processLogic(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/cart")

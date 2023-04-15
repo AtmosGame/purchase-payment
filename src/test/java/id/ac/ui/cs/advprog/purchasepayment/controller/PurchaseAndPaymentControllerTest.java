@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
@@ -16,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = PurchaseAndPaymentController.class)
@@ -37,6 +37,9 @@ class PurchaseAndPaymentControllerTest {
 
     @MockBean
     private PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<AddSecretTokenRequest, Void> addSecretTokenLogic;
 
     @Test
     void testGetTest() throws Exception {
@@ -93,5 +96,19 @@ class PurchaseAndPaymentControllerTest {
                 .andExpect(status().isOk());
 
         verify(updatePaymentLogic, times(1)).processLogic(updatePaymentRequest);
+    }
+
+    @Test
+    void testAddSecretToken() throws Exception {
+        AddSecretTokenRequest addSecretTokenRequest = AddSecretTokenRequest.builder()
+                .tokenName("<secret_token>")
+                .build();
+
+        mockMvc.perform(post("/api/v1/add-token")
+                    .contentType("application/json")
+                    .content(objectMapper.writeValueAsString(addSecretTokenRequest)))
+                .andExpect(status().isCreated());
+
+        verify(addSecretTokenLogic, times(1)).processLogic(addSecretTokenRequest);
     }
 }
