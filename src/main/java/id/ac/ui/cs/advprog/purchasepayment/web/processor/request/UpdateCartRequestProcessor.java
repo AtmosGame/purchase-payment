@@ -6,13 +6,15 @@ import id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request.UpdateC
 import id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request.UpdateCartRequestValidatorFactoryImpl;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 
 @Processor
+@Getter
 public class UpdateCartRequestProcessor implements RequestProcessor<UpdateCartRequest> {
     private Validator<UpdateCartRequest> validator;
 
     @PostConstruct
-    private void init() {
+    public void init() {
         UpdateCartRequestValidatorFactory factory = new UpdateCartRequestValidatorFactoryImpl();
         Validator<UpdateCartRequest> updateCartRequestDataValidator = factory.createUpdateCartRequestDataValidator();
         Validator<UpdateCartRequest> appNotInListValidator = factory.createAppNotInListValidator();
