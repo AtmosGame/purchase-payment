@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
@@ -10,14 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = PurchaseAndPaymentController.class)
 @AutoConfigureMockMvc
@@ -30,6 +31,9 @@ class PurchaseAndPaymentControllerTest {
 
     @MockBean
     private PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
 
     @MockBean
     private PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
@@ -58,6 +62,22 @@ class PurchaseAndPaymentControllerTest {
                 .andExpect(status().isOk());
 
         verify(updateCartLogic, times(1)).processLogic(updateCartRequest);
+    }
+
+    @Test
+    void testGetCart() throws Exception {
+        GetCartResponse getCartResponse = new GetCartResponse();
+        getCartResponse.setId(1);
+
+        when(getCartLogic.processLogic(null)).thenReturn(getCartResponse);
+
+        mockMvc.perform(get("/api/v1/cart")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("getCart"))
+                .andExpect(jsonPath("$.id").value(String.valueOf(getCartResponse.getId())));
+
+        verify(getCartLogic, atLeastOnce()).processLogic(null);
     }
 
     @Test
