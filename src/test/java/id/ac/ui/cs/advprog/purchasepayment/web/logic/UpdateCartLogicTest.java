@@ -35,7 +35,7 @@ class UpdateCartLogicTest {
     }
 
     @Test
-    void testProccesLogic() {
+    void testProcessLogic() {
         updateCartLogic.processLogic(request);
         verify(updateCartRequestProcessor, times(1)).validate(request);
         verify(updateCartImpl, times(1)).update(request);

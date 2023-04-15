@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.purchasepayment.web.processor.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.assertj.core.api.Assertions;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -40,7 +40,6 @@ class UpdateCartRequestProcessorTest {
     @Test
     void testInit() {
         updateCartRequestProcessor.init();
-        System.out.println(updateCartRequestProcessor.getValidator());
         Assertions.assertThat(updateCartRequestProcessor.getValidator()).isNotNull();
     }
 }
