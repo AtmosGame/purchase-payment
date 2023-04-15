@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
+import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
+    private final PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
 
     @GetMapping("/test")
@@ -25,6 +27,13 @@ public class PurchaseAndPaymentController {
         updateCartLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/cart")
+    public ResponseEntity<GetCartResponse> getCart() {
+        GetCartResponse response = getCartLogic.processLogic(null);
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/payment")
     public ResponseEntity<Void> updatePayment(@RequestBody UpdatePaymentRequest request) {
         updatePaymentLogic.processLogic(request);
