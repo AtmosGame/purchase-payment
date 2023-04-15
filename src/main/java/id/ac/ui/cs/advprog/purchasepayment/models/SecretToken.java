@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "secret-token")
+@Table(name = "secret_token")
 public class SecretToken {
     @Id
     @GeneratedValue

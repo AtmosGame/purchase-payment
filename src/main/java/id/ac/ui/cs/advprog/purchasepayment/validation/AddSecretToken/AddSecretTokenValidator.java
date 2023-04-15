@@ -8,7 +8,7 @@ public class AddSecretTokenValidator extends Validator<AddSecretTokenRequest> {
 
     @Override
     public boolean isValid(AddSecretTokenRequest request) {
-        if(request == null){
+        if(request.getTokenName().equals("")){
             throw new RuntimeException("Token cannot be null");
         }
         return true;

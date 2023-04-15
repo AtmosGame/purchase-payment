@@ -26,7 +26,7 @@ public class PurchaseAndPaymentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/add-token")
+    @PostMapping("/add-token")
     public ResponseEntity<Void> addToken(@RequestBody AddSecretTokenRequest request) {
         addSecretTokenLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.OK);

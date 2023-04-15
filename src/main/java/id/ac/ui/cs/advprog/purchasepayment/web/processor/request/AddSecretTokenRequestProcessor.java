@@ -3,11 +3,12 @@ package id.ac.ui.cs.advprog.purchasepayment.web.processor.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.Processor;
 import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
+import id.ac.ui.cs.advprog.purchasepayment.validation.AddSecretToken.AddSecretTokenValidator;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 
 @Processor
 public class AddSecretTokenRequestProcessor implements RequestProcessor<AddSecretTokenRequest> {
-    private Validator<AddSecretTokenRequest> validator;
+    private Validator<AddSecretTokenRequest> validator = new AddSecretTokenValidator();
 
     @Override
     public void validate(AddSecretTokenRequest request) {
