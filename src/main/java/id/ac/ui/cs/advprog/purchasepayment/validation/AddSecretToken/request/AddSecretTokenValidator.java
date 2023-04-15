@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.purchasepayment.validation.AddSecretToken;
+package id.ac.ui.cs.advprog.purchasepayment.validation.AddSecretToken.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
