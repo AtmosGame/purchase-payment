@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.UseCase;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInCartException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
@@ -50,8 +51,7 @@ public class UpdateCartImpl implements UpdateCart {
                     .build();
             return cartDetailsRepository.save(cartDetails);
         } else {
-            // TODO: change to appropriate exception
-            throw new RuntimeException("App already exist in cart");
+            throw new AppAlreadyInCartException(request.getName(), request.getId());
         }
     }
 

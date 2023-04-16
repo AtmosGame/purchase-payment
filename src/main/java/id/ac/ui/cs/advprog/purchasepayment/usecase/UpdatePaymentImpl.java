@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 public class UpdatePaymentImpl implements UpdatePayment{
     @Override
     public void update(String checkoutId) {
-        // TODO: implement
+        // implement
     }
 }
