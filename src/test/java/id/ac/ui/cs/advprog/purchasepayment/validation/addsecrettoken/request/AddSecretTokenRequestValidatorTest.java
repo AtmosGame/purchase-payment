@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.purchasepayment.validation.AddSecretToken.request;
+package id.ac.ui.cs.advprog.purchasepayment.validation.addsecrettoken.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AddSecretTokenRequestValidatorTest {
+class AddSecretTokenRequestValidatorTest {
 
     private AddSecretTokenValidator validator;
 
@@ -16,7 +16,7 @@ public class AddSecretTokenRequestValidatorTest {
     }
 
     @Test
-    public void testIsValidWithValidRequest() {
+    void testIsValidWithValidRequest() {
         AddSecretTokenRequest request = AddSecretTokenRequest.builder()
                 .tokenName("valid_token_name")
                 .build();
@@ -24,7 +24,7 @@ public class AddSecretTokenRequestValidatorTest {
     }
 
     @Test
-    public void testIsValidWithEmptyTokenName() {
+    void testIsValidWithEmptyTokenName() {
         AddSecretTokenRequest request = AddSecretTokenRequest.builder()
                 .tokenName("")
                 .build();
