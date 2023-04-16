@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInCartException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
@@ -107,9 +108,11 @@ class UpdateCartImplTest {
     @Test
     void testAddCartDetailsToCartByRequestWhenAppIsInCart() {
         doReturn(false).when(updateCartImpl).isAppNotInCart(request);
-        Assertions.assertThatThrownBy(() -> {
-            updateCartImpl.addCartDetailsToCartByRequest(request, userCart);
-        }).isInstanceOf(RuntimeException.class).hasMessage("App already exist in cart");
+        Assertions.assertThatThrownBy(() -> updateCartImpl.addCartDetailsToCartByRequest(request, userCart))
+                .isInstanceOf(AppAlreadyInCartException.class)
+                .hasMessage(String.format("App %s with id:%s already exist in cart",
+                        request.getName(),
+                        request.getId()));
     }
 
     @Test
