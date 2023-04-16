@@ -6,7 +6,6 @@ import id.ac.ui.cs.advprog.purchasepayment.models.SecretToken;
 import id.ac.ui.cs.advprog.purchasepayment.ports.SecretTokenRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Date;
 
 @UseCase
 @RequiredArgsConstructor
@@ -16,7 +15,7 @@ public class AddSecretTokenImpl implements AddSecretToken {
 
     @Override
     public SecretToken addSecretTokenByRequest(AddSecretTokenRequest request) {
-        SecretToken token = new SecretToken();
+        var token = new SecretToken();
         token.setTokenName(request.getTokenName());
         return secretTokenRepository.save(token);
     }
