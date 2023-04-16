@@ -29,6 +29,6 @@ class AddSecretTokenRequestValidatorTest {
                 .tokenName("")
                 .build();
         RuntimeException exception = assertThrows(RuntimeException.class, () -> validator.isValid(request));
-        assertEquals("Token cannot be null", exception.getMessage());
+        assertEquals("Token cannot be empty", exception.getMessage());
     }
 }
