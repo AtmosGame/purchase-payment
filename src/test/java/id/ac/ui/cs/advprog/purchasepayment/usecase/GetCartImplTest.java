@@ -78,7 +78,7 @@ class GetCartImplTest {
     }
 
     @Test
-    public void testFindCartByUsernameAndNotFoundShouldThrowException() {
+    void testFindCartByUsernameAndNotFoundShouldThrowException() {
         when(cartRepository.findByUsername(any(String.class)))
                 .thenReturn(Optional.empty());
 

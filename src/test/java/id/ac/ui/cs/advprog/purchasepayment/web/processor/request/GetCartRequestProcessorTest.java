@@ -38,6 +38,6 @@ class GetCartRequestProcessorTest {
         getCartRequestProcessor.init();
         System.out.println(getCartRequestProcessor.getValidator());
         // INFO: Waiting for validator to be finalized
-        // Assertions.assertThat(getCartRequestProcessor.getValidator()).isNotNull();
+         Assertions.assertThat(getCartRequestProcessor.getValidator()).isNotNull();
     }
 }
