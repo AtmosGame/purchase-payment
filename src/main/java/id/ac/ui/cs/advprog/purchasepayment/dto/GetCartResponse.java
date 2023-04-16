@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -24,13 +24,15 @@ public class GetCartResponse {
         if (cart == null) {
             return null;
         }
+
+        // refactor .toList() to collect(Collectors.toList())
         return GetCartResponse.builder()
                 .id(cart.getId())
                 .username(cart.getUsername())
                 .cartDetailsData(orderDetails
                         .stream()
                         .map(CartDetailsData::fromCartDetails)
-                        .toList())
+                        .collect(Collectors.toList()))
                 .build();
     }
 

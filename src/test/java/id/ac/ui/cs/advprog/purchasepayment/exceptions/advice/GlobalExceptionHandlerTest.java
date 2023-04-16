@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 
 @ExtendWith(MockitoExtension.class)
-public class GlobalExceptionHandlerTest {
+class GlobalExceptionHandlerTest {
 
     @InjectMocks
     private GlobalExceptionHandler globalExceptionHandler;
@@ -31,7 +31,7 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
-    public void cartNotAvailable_shouldReturnErrorResponse() {
+    void cartNotAvailable_shouldReturnErrorResponse() {
         // arrange
         CartDoesNotExistException exception = new CartDoesNotExistException(username);
 
