@@ -4,6 +4,7 @@ import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
+import id.ac.ui.cs.advprog.purchasepayment.dto.CheckoutCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<AddSecretTokenRequest, Void> addSecretTokenLogic;
     private final PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
+    private final PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
 
     @GetMapping("/test")
     public ResponseEntity<String> sayTest() {
@@ -45,6 +47,12 @@ public class PurchaseAndPaymentController {
     @PutMapping("/payment")
     public ResponseEntity<Void> updatePayment(@RequestBody UpdatePaymentRequest request) {
         updatePaymentLogic.processLogic(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/cart/checkout")
+    public ResponseEntity<Void> checkoutCart(@RequestBody CheckoutCartRequest request) {
+        checkoutCartLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
