@@ -1,10 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
-import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
+import id.ac.ui.cs.advprog.purchasepayment.dto.*;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,6 +37,9 @@ class PurchaseAndPaymentControllerTest {
 
     @MockBean
     private PurchaseAndPaymentLogic<AddSecretTokenRequest, Void> addSecretTokenLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
 
     @Test
     void testGetTest() throws Exception {
@@ -110,5 +110,20 @@ class PurchaseAndPaymentControllerTest {
                 .andExpect(status().isCreated());
 
         verify(addSecretTokenLogic, times(1)).processLogic(addSecretTokenRequest);
+    }
+
+    @Test
+    void testCheckoutCart() throws Exception {
+//        CheckoutCartRequest checkoutCartRequest = CheckoutCartRequest.builder()
+//                .id(1)
+//                .username("<requestor_username>")
+//                .build();
+//
+//        mockMvc.perform(post("/api/v1/cart/checkout")
+//                    .contentType("application/json")
+//                    .content(objectMapper.writeValueAsString(checkoutCartRequest)))
+//                .andExpect(status().isCreated());
+//
+//        verify(checkoutCartLogic, times(1)).processLogic(checkoutCartRequest);
     }
 }

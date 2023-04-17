@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckoutCartRequest {
-    private String id;
-    private String name;
-    private Double price;
+    private Integer id;
     private String username;
 }
