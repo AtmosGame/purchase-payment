@@ -2,12 +2,9 @@ package id.ac.ui.cs.advprog.purchasepayment.web.logic;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.Logic;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.usecase.GetCart;
 import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @Logic
 @RequiredArgsConstructor
@@ -18,7 +15,7 @@ public class GetCartLogic implements PurchaseAndPaymentLogic<Void, GetCartRespon
     @Override
     public GetCartResponse processLogic(Void request) {
         // TODO: Get current user's username
-        String username = "edutjie";
+        var username = "edutjie";
 
         getCartRequestProcessor.validate(request);
         return getCartImpl.findCartByUsername(username);

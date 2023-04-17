@@ -17,6 +17,6 @@ public class GetCartRequestProcessor implements RequestProcessor<Void> {
 
     @Override
     public void validate(Void request) {
-        // validator.isValid(request);
+        // TODO: validate request
     }
 }

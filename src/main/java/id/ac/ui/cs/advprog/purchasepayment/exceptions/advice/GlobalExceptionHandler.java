@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {CartDoesNotExistException.class})
     public ResponseEntity<Object> cartNotAvailable(Exception exception) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-        ErrorTemplate baseException = new ErrorTemplate(
+        var baseException = new ErrorTemplate(
                 exception.getMessage(),
                 badRequest,
                 ZonedDateTime.now(ZoneId.of("Z"))
