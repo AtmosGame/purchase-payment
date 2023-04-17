@@ -46,9 +46,9 @@ class GlobalExceptionHandlerTest {
         ErrorTemplate expectedError = new ErrorTemplate(expectedErrorMessage, expectedHttpStatus, expectedTimestamp);
 
         // assert
-        Assertions.assertThat(expectedError.httpStatus()).isEqualTo(actualError.httpStatus());
-        Assertions.assertThat(expectedError.message()).isEqualTo(actualError.message());
-        Assertions.assertThat(expectedError.timestamp().truncatedTo(ChronoUnit.SECONDS))
-                .isEqualTo(actualError.timestamp().truncatedTo(ChronoUnit.SECONDS));
+        Assertions.assertThat(expectedError.getHttpStatus()).isEqualTo(actualError.getHttpStatus());
+        Assertions.assertThat(expectedError.getMessage()).isEqualTo(actualError.getMessage());
+        Assertions.assertThat(expectedError.getTimestamp().truncatedTo(ChronoUnit.SECONDS))
+                .isEqualTo(actualError.getTimestamp().truncatedTo(ChronoUnit.SECONDS));
     }
 }

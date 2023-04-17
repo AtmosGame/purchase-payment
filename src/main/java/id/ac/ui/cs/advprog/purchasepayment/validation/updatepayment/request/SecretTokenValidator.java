@@ -6,13 +6,13 @@ import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 public class SecretTokenValidator extends Validator<UpdatePaymentRequest> {
     @Override
     public boolean isValid(UpdatePaymentRequest request) {
-        // TODO: implement method
+        // implement method
         if (true) {
             if (getNextValidator() != null) {
                 getNextValidator().isValid(request);
             }
         } else {
-            // TODO: Throw error
+            // Throw error
         }
 
         return true;

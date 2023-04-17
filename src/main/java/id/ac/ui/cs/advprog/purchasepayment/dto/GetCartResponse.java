@@ -25,7 +25,6 @@ public class GetCartResponse {
             return null;
         }
 
-        // refactor .toList() to collect(Collectors.toList())
         return GetCartResponse.builder()
                 .id(cart.getId())
                 .username(cart.getUsername())

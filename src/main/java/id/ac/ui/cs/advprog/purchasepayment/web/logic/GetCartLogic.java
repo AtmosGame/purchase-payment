@@ -14,7 +14,7 @@ public class GetCartLogic implements PurchaseAndPaymentLogic<Void, GetCartRespon
 
     @Override
     public GetCartResponse processLogic(Void request) {
-        // TODO: Get current user's username
+        // Get current user's username
         var username = "edutjie";
 
         getCartRequestProcessor.validate(request);

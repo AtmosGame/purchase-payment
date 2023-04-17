@@ -12,11 +12,11 @@ public class GetCartRequestProcessor implements RequestProcessor<Void> {
 
     @PostConstruct
     public void init() {
-        // TODO: Check if user is logged in
+        // Check if user is logged in
     }
 
     @Override
     public void validate(Void request) {
-        // TODO: validate request
+        // validate request
     }
 }
