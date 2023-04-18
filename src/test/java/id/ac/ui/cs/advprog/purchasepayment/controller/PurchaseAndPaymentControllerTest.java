@@ -114,16 +114,16 @@ class PurchaseAndPaymentControllerTest {
 
     @Test
     void testCheckoutCart() throws Exception {
-//        CheckoutCartRequest checkoutCartRequest = CheckoutCartRequest.builder()
-//                .id(1)
-//                .username("<requestor_username>")
-//                .build();
-//
-//        mockMvc.perform(post("/api/v1/cart/checkout")
-//                    .contentType("application/json")
-//                    .content(objectMapper.writeValueAsString(checkoutCartRequest)))
-//                .andExpect(status().isCreated());
-//
-//        verify(checkoutCartLogic, times(1)).processLogic(checkoutCartRequest);
+        CheckoutCartRequest checkoutCartRequest = CheckoutCartRequest.builder()
+                .id(1)
+                .username("<requestor_username>")
+                .build();
+
+        mockMvc.perform(post("/api/v1/cart/checkout")
+                    .contentType("application/json")
+                    .content(objectMapper.writeValueAsString(checkoutCartRequest)))
+                .andExpect(status().isCreated());
+
+        verify(checkoutCartLogic, times(1)).processLogic(checkoutCartRequest);
     }
 }
