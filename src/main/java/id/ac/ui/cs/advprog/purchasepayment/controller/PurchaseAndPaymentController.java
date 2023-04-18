@@ -53,6 +53,6 @@ public class PurchaseAndPaymentController {
     @PostMapping("/cart/checkout")
     public ResponseEntity<Void> checkoutCart(@RequestBody CheckoutCartRequest request) {
         checkoutCartLogic.processLogic(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
