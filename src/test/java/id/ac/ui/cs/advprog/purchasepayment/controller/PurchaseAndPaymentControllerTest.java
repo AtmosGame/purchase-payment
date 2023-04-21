@@ -105,8 +105,8 @@ class PurchaseAndPaymentControllerTest {
                 .build();
 
         mockMvc.perform(post("/api/v1/add-token")
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(addSecretTokenRequest)))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(addSecretTokenRequest)))
                 .andExpect(status().isCreated());
 
         verify(addSecretTokenLogic, times(1)).processLogic(addSecretTokenRequest);
@@ -120,8 +120,8 @@ class PurchaseAndPaymentControllerTest {
                 .build();
 
         mockMvc.perform(post("/api/v1/cart/checkout")
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(checkoutCartRequest)))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(checkoutCartRequest)))
                 .andExpect(status().isCreated());
 
         verify(checkoutCartLogic, times(1)).processLogic(checkoutCartRequest);

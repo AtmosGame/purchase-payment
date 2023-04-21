@@ -7,7 +7,6 @@ import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchased
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
 import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckoutCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
