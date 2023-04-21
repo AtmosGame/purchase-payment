@@ -14,19 +14,18 @@ public class CheckPurchasedLogic implements PurchaseAndPaymentLogic<CheckPurchas
     private final RequestProcessor<CheckPurchasedRequest> CheckPurchasedRequestProcessor;
     private final ResponseProcessor<CheckPurchasedResponse, Boolean> CheckPurchasedResponseProcessor;
     private final CheckPurchasedApp checkPurchasedAppImpl;
-    public Boolean isPurchased;
+    private Boolean isPurchased;
 
 
     @Override
     public Void processLogic(CheckPurchasedRequest request) {
         CheckPurchasedRequestProcessor.validate(request);
-        boolean isPurchased = checkPurchasedAppImpl.isPurchased(request);
+        this.isPurchased = checkPurchasedAppImpl.isPurchased(request);
         CheckPurchasedResponse response = new CheckPurchasedResponse(isPurchased);
-        this.isPurchased = CheckPurchasedResponseProcessor.process(response);
+        CheckPurchasedResponseProcessor.process(response);
         return null;
     }
     public Boolean getIsPurchased() {
         return isPurchased;
     }
-
 }

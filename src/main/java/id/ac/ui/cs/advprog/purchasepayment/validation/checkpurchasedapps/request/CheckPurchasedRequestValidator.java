@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.purchasepayment.validation.CheckPurchasedApps.request;
+package id.ac.ui.cs.advprog.purchasepayment.validation.checkpurchasedapps.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;

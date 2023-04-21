@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "purchased-app")
+@Table(name = "purchased_app")
 public class PurchasedApp {
     @Id
     @GeneratedValue

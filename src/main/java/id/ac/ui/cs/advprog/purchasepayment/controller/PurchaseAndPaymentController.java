@@ -34,7 +34,7 @@ public class PurchaseAndPaymentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/check-purchased")
+    @PostMapping("/check-purchased")
     public ResponseEntity<Boolean> checkPurchased(@RequestBody CheckPurchasedRequest request) {
         CheckPurchasedLogic logic = new CheckPurchasedLogic(checkPurchasedRequestProcessor, checkPurchasedResponseProcessor, checkPurchasedAppImpl);
         logic.processLogic(request);

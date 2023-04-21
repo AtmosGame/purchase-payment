@@ -2,7 +2,7 @@ package id.ac.ui.cs.advprog.purchasepayment.web.processor.response;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.Processor;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedResponse;
-import id.ac.ui.cs.advprog.purchasepayment.validation.CheckPurchasedApps.response.CheckPurchasedResponseValidator;
+import id.ac.ui.cs.advprog.purchasepayment.validation.checkpurchasedapps.response.CheckPurchasedResponseValidator;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 
 @Processor
