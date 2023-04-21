@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.UseCase;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInCartException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
@@ -19,7 +20,7 @@ public class UpdateCartImpl implements UpdateCart {
 
     @Override
     public Cart update(UpdateCartRequest request) {
-        Cart userCart = getCartByUsername(request.getUsername());
+        var userCart = getCartByUsername(request.getUsername());
         addCartDetailsToCartByRequest(request, userCart);
         return userCart;
     }
@@ -28,7 +29,7 @@ public class UpdateCartImpl implements UpdateCart {
     public Cart getCartByUsername(String username) {
         Optional<Cart> optionalUserCart = findCartByUsername(username);
         return optionalUserCart.orElseGet(() -> {
-            Cart userCart = Cart.builder().username(username).build();
+            var userCart = Cart.builder().username(username).build();
             return cartRepository.save(userCart);
         });
     }
@@ -41,17 +42,16 @@ public class UpdateCartImpl implements UpdateCart {
     @Override
     public CartDetails addCartDetailsToCartByRequest(UpdateCartRequest request, Cart cart) {
         if (isAppNotInCart(request)) {
-            CartDetails cartDetails = CartDetails.builder()
+            var cartDetails = CartDetails.builder()
                     .appId(request.getId())
                     .appName(request.getName())
                     .addDate(new Date())
                     .appPrice(request.getPrice())
+                    .cart(cart)
                     .build();
-            cartDetails.setCart(cart);
             return cartDetailsRepository.save(cartDetails);
         } else {
-            // TODO: change to appropriate exception
-            throw new RuntimeException("App already exist in cart");
+            throw new AppAlreadyInCartException(request.getName(), request.getId());
         }
     }
 
