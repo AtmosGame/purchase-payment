@@ -1,20 +1,24 @@
 package id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.RequestDataIsNotValidException;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 
 public class UpdateCartRequestDataValidator extends Validator<UpdateCartRequest> {
     @Override
     public boolean isValid(UpdateCartRequest request) {
-        // implement method
-        if (true) {
+        if (requestDataValid(request)) {
             if (getNextValidator() != null) {
                 getNextValidator().isValid(request);
             }
         } else {
-            // Throw error
+            throw new RequestDataIsNotValidException();
         }
 
+        return true;
+    }
+
+    public boolean requestDataValid(UpdateCartRequest request) {
         return true;
     }
 }
