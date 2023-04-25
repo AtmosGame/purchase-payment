@@ -1,7 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.RequestDataIsNotValidException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.RequestDataInvalidException;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 
 public class UpdateCartRequestDataValidator extends Validator<UpdateCartRequest> {
@@ -12,7 +12,7 @@ public class UpdateCartRequestDataValidator extends Validator<UpdateCartRequest>
                 getNextValidator().isValid(request);
             }
         } else {
-            throw new RequestDataIsNotValidException();
+            throw new RequestDataInvalidException();
         }
 
         return true;

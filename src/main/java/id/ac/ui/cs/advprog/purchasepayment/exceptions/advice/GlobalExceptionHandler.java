@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = {
             CartDoesNotExistException.class,
-            RequestDataIsNotValidException.class,
+            RequestDataInvalidException.class,
             AppAlreadyInListException.class,
             AppAlreadyInCartException.class,
             AppAlreadyInCheckoutException.class,

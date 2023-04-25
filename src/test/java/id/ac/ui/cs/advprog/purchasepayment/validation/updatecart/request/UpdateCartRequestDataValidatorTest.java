@@ -1,7 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.RequestDataIsNotValidException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.RequestDataInvalidException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ class UpdateCartRequestDataValidatorTest {
     void testIsValidThrowError() {
         doReturn(false).when(updateCartRequestDataValidator).requestDataValid(request);
         Assertions.assertThatThrownBy(() -> updateCartRequestDataValidator.isValid(request))
-                .isInstanceOf(RequestDataIsNotValidException.class)
+                .isInstanceOf(RequestDataInvalidException.class)
                 .hasMessage("Request data is not valid");
     }
 }
