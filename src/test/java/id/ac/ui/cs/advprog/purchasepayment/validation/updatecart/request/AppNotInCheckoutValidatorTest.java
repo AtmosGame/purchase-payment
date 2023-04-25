@@ -36,11 +36,11 @@ class AppNotInCheckoutValidatorTest {
 
     @Test
     void testIsValidReturnTrueWithNextValidatorNotNull() {
-        UpdateCartRequestDataValidator nextValidator = Mockito.spy(UpdateCartRequestDataValidator.class);
+        AppNotInCheckoutValidator  nextValidator = Mockito.spy(AppNotInCheckoutValidator .class);
         appNotInCheckoutValidator.setNextValidator(nextValidator);
 
         doReturn(true).when(appNotInCheckoutValidator).appNotInCheckout(request);
-        doReturn(true).when(nextValidator).requestDataValid(request);
+        doReturn(true).when(nextValidator).appNotInCheckout(request);
 
         Assertions.assertThat(appNotInCheckoutValidator.isValid(request)).isTrue();
     }

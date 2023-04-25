@@ -36,11 +36,11 @@ class AppNotInListValidatorTest {
 
     @Test
     void testIsValidReturnTrueWithNextValidatorNotNull() {
-        UpdateCartRequestDataValidator nextValidator = Mockito.spy(UpdateCartRequestDataValidator.class);
+        AppNotInListValidator nextValidator = Mockito.spy(AppNotInListValidator.class);
         appNotInListValidator.setNextValidator(nextValidator);
 
         doReturn(true).when(appNotInListValidator).appNotInList(request);
-        doReturn(true).when(nextValidator).requestDataValid(request);
+        doReturn(true).when(nextValidator).appNotInList(request);
 
         Assertions.assertThat(appNotInListValidator.isValid(request)).isTrue();
     }
