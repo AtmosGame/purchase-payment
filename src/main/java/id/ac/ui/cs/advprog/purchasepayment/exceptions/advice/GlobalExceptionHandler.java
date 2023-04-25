@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
             AppAlreadyInListException.class,
             AppAlreadyInCartException.class,
             AppAlreadyInCheckoutException.class,
+            CheckoutIsExpiredException.class
     })
     public ResponseEntity<Object> cartNotAvailable(Exception exception) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
@@ -27,5 +28,16 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(baseException, badRequest);
+    }
+
+    @ExceptionHandler(value = {SecretTokenInvalidException.class})
+    public ResponseEntity<Object> secretTokenInvalid(Exception exception) {
+        var baseException = new CustomErrorTemplate(
+                exception.getMessage(),
+                "INVALID_TOKEN",
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+
+        return ResponseEntity.status(498).body(baseException);
     }
 }

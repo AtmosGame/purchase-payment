@@ -8,9 +8,7 @@ public class UpdateCartRequestDataValidator extends Validator<UpdateCartRequest>
     @Override
     public boolean isValid(UpdateCartRequest request) {
         if (requestDataValid(request)) {
-            if (getNextValidator() != null) {
-                getNextValidator().isValid(request);
-            }
+            nextValidatorIsValid(request);
         } else {
             throw new RequestDataInvalidException();
         }

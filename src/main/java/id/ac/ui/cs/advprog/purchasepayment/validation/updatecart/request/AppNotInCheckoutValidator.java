@@ -8,9 +8,7 @@ public class AppNotInCheckoutValidator extends Validator<UpdateCartRequest> {
     @Override
     public boolean isValid(UpdateCartRequest request) {
         if (appNotInCheckout(request)) {
-            if (getNextValidator() != null) {
-                getNextValidator().isValid(request);
-            }
+            nextValidatorIsValid(request);
         } else {
             throw new AppAlreadyInCheckoutException(request.getName(), request.getId());
         }

@@ -8,9 +8,7 @@ public class AppNotInListValidator extends Validator<UpdateCartRequest> {
     @Override
     public boolean isValid(UpdateCartRequest request) {
         if (appNotInList(request)) {
-            if (getNextValidator() != null) {
-                getNextValidator().isValid(request);
-            }
+            nextValidatorIsValid(request);
         } else {
             throw new AppAlreadyInListException(request.getName(), request.getId());
         }

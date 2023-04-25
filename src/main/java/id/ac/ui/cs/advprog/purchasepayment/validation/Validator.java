@@ -12,4 +12,10 @@ import lombok.Setter;
 public abstract class Validator<T> {
     protected Validator<T> nextValidator;
     public abstract boolean isValid(T request);
+    public boolean nextValidatorIsValid(T request) {
+        if (getNextValidator() != null) {
+            getNextValidator().isValid(request);
+        }
+        return true;
+    }
 }
