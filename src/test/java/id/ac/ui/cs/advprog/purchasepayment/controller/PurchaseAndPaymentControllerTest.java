@@ -2,8 +2,13 @@ package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.purchasepayment.dto.*;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
+import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
+import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
+import id.ac.ui.cs.advprog.purchasepayment.web.processor.response.ResponseProcessor;
 import org.assertj.core.api.Assertions;
+import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,6 +46,14 @@ class PurchaseAndPaymentControllerTest {
     @MockBean
     private PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
 
+    @MockBean
+    private RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
+
+    @MockBean
+    private ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
+
+    @MockBean
+    private CheckPurchasedApp checkPurchasedAppImpl;
     @Test
     void testGetTest() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/api/v1/test"))
@@ -125,5 +138,26 @@ class PurchaseAndPaymentControllerTest {
                 .andExpect(status().isCreated());
 
         verify(checkoutCartLogic, times(1)).processLogic(checkoutCartRequest);
+    }
+    @Test
+    void testCheckPurchasedApp() throws Exception {
+        CheckPurchasedLogic logicMock = mock(CheckPurchasedLogic.class);
+        CheckPurchasedRequest request = CheckPurchasedRequest.builder()
+                .appId("app-id")
+                .userId("user-id")
+                .build();
+
+        // when
+        MvcResult result = mockMvc.perform(post("/api/v1/check-purchased")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        // then
+        String content = result.getResponse().getContentAsString();
+        boolean isPurchased = objectMapper.readValue(content, Boolean.class);
+        verify(checkPurchasedAppImpl, times(1)).isPurchased(request);
+        assertEquals(false, isPurchased);
     }
 }

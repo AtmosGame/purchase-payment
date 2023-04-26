@@ -22,14 +22,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
-    private final PurchaseAndPaymentLogic<CheckPurchasedRequest, Void> checkPurchasedLogic;
-    private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
-    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
-    private final CheckPurchasedApp checkPurchasedAppImpl;
     private final PurchaseAndPaymentLogic<AddSecretTokenRequest, Void> addSecretTokenLogic;
     private final PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
     private final PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
+    private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
+    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
+    private final CheckPurchasedApp checkPurchasedAppImpl;
 
     @GetMapping("/test")
     public ResponseEntity<String> sayTest() {
@@ -46,7 +45,7 @@ public class PurchaseAndPaymentController {
         CheckPurchasedLogic logic = new CheckPurchasedLogic(checkPurchasedRequestProcessor, checkPurchasedResponseProcessor, checkPurchasedAppImpl);
         logic.processLogic(request);
         boolean isPurchased = logic.getIsPurchased();
-        return new ResponseEntity<>(isPurchased,HttpStatus.OK);
+        return new ResponseEntity<>(isPurchased,HttpStatus.CREATED);
     }
     @PostMapping("/add-token")
     public ResponseEntity<Void> addToken(@RequestBody AddSecretTokenRequest request) {

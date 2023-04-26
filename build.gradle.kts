@@ -2,8 +2,15 @@ plugins {
     java
     id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
-    id("org.sonarqube") version "3.2.0"
+    id("org.sonarqube") version "3.5.0.2730"
     jacoco
+}
+
+sonarqube {
+    properties {
+        property ("sonar.projectKey", "atmos-purchase-payment")
+        property ("sonar.organization", "atmos-purchase-payment")
+    }
 }
 
 group = "id.ac.ui.cs.advprog"
