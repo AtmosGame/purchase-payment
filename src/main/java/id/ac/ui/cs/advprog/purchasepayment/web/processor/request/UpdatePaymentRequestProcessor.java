@@ -7,16 +7,22 @@ import id.ac.ui.cs.advprog.purchasepayment.validation.updatepayment.request.Upda
 import id.ac.ui.cs.advprog.purchasepayment.validation.updatepayment.request.UpdatePaymentRequestFactoryImpl;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Processor
 @Getter
 public class UpdatePaymentRequestProcessor implements RequestProcessor<UpdatePaymentRequest>{
     private Validator<UpdatePaymentRequest> validator;
+    private Validator<UpdatePaymentRequest> secretTokenValidator;
+
+    @Autowired
+    public void setSecretTokenValidator(Validator<UpdatePaymentRequest> secretTokenValidator) {
+        this.secretTokenValidator = secretTokenValidator;
+    }
 
     @PostConstruct
     public void init() {
         UpdatePaymentRequestFactory factory = new UpdatePaymentRequestFactoryImpl();
-        Validator<UpdatePaymentRequest> secretTokenValidator = factory.createSecretTokenValidator();
         Validator<UpdatePaymentRequest> checkoutNotExpiredValidator = factory.createCheckoutNotExpiredValidator();
 
         secretTokenValidator.setNextValidator(checkoutNotExpiredValidator);

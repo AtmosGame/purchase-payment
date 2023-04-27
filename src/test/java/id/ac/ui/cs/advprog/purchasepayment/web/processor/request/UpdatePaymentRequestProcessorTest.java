@@ -19,6 +19,8 @@ class UpdatePaymentRequestProcessorTest {
     private UpdatePaymentRequestProcessor updatePaymentRequestProcessor;
     @Mock
     private Validator<UpdatePaymentRequest> validator;
+    @Mock
+    private Validator<UpdatePaymentRequest> secretTokenValidator;
     private UpdatePaymentRequest request;
 
     @BeforeEach
