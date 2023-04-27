@@ -11,6 +11,8 @@ public interface CartDetailsRepository extends CrudRepository<CartDetails, Integ
     List<CartDetails> findAllByCartId(Integer cartId);
     List<CartDetails> findByCartUsername(String username);
     Optional<CartDetails> findByCartUsernameAndAppId(String username, String appId);
+
+    boolean existsByCartUsernameAndAppId(String username, String appId);
     @Transactional
     void deleteByCartId(Integer cartId);
 }

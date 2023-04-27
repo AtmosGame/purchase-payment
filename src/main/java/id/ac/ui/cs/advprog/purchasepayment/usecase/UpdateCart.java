@@ -12,5 +12,4 @@ public interface UpdateCart {
     Optional<Cart> findCartByUsername(String username);
     CartDetails addCartDetailsToCartByRequest(UpdateCartRequest request, Cart cart);
     Optional<CartDetails> findCartDetailsByCartUsernameAndAppId(String username, String appId);
-    boolean isAppNotInCart(UpdateCartRequest request);
 }

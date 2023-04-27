@@ -2,23 +2,29 @@ package id.ac.ui.cs.advprog.purchasepayment.web.processor.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.Processor;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 import id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request.UpdateCartRequestValidatorFactory;
 import id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request.UpdateCartRequestValidatorFactoryImpl;
-import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Processor
 @Getter
 public class UpdateCartRequestProcessor implements RequestProcessor<UpdateCartRequest> {
     private Validator<UpdateCartRequest> validator;
+    private Validator<UpdateCartRequest> appNotInCartValidator;
+
+    @Autowired
+    public void setAppNotInCartValidator(Validator<UpdateCartRequest> appNotInCartValidator) {
+        this.appNotInCartValidator = appNotInCartValidator;
+    }
 
     @PostConstruct
     public void init() {
         UpdateCartRequestValidatorFactory factory = new UpdateCartRequestValidatorFactoryImpl();
         Validator<UpdateCartRequest> updateCartRequestDataValidator = factory.createUpdateCartRequestDataValidator();
         Validator<UpdateCartRequest> appNotInListValidator = factory.createAppNotInListValidator();
-        Validator<UpdateCartRequest> appNotInCartValidator = factory.createAppNotInCartValidator();
         Validator<UpdateCartRequest> appNotInCheckoutValidator = factory.createAppNotInCheckoutValidator();
 
         updateCartRequestDataValidator.setNextValidator(appNotInListValidator);
