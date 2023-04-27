@@ -13,20 +13,22 @@ variables:
   GCP_STATIC_IP: $GCP_STATIC_IP
   SONAR_LOGIN: $SONAR_LOGIN
   SONAR_PROJECT_KEY: $SONAR_PROJECT_KEY
-  SONAR_USER_HOME: $CI_PROJECT_DIR/.sonar  # Defines the location of the analysis task cache
-  GIT_DEPTH: 0  # Tells git to fetch all the branches of the project, required by the analysis task
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
 
 
 stages:
+  - sonarcloud-check
   - build
   - test
   - publish
   - deploy
 
 sonarcloud-check:
-  image: gradle:jre11-slim
+  stage: sonarcloud-check
+  image: gradle:jdk11-alpine
   cache:
-    key: $CI_JOB_NAME
+    key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
   script: gradle sonarqube
@@ -34,7 +36,6 @@ sonarcloud-check:
     - merge_requests
     - main
     - develop
-
 
 Build:
   stage: build
