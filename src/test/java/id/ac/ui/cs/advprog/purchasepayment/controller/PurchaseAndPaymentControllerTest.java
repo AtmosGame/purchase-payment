@@ -54,6 +54,8 @@ class PurchaseAndPaymentControllerTest {
 
     @MockBean
     private CheckPurchasedApp checkPurchasedAppImpl;
+    private PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
+
     @Test
     void testGetTest() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/api/v1/test"))
@@ -139,9 +141,9 @@ class PurchaseAndPaymentControllerTest {
 
         verify(checkoutCartLogic, times(1)).processLogic(checkoutCartRequest);
     }
+
     @Test
     void testCheckPurchasedApp() throws Exception {
-        CheckPurchasedLogic logicMock = mock(CheckPurchasedLogic.class);
         CheckPurchasedRequest request = CheckPurchasedRequest.builder()
                 .appId("app-id")
                 .userId("user-id")
@@ -159,5 +161,16 @@ class PurchaseAndPaymentControllerTest {
         boolean isPurchased = objectMapper.readValue(content, Boolean.class);
         verify(checkPurchasedAppImpl, times(1)).isPurchased(request);
         assertEquals(false, isPurchased);
+    }
+
+    @Test
+    void testDeleteCart() throws Exception {
+        var appId = "1";
+        mockMvc.perform(delete("/api/v1/cart/" + appId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("deleteCart"));
+
+        verify(deleteCartLogic, times(1)).processLogic(appId);
     }
 }
