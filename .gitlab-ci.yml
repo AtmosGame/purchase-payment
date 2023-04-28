@@ -36,6 +36,8 @@ sonarcloud-check:
     - merge_requests
     - main
     - develop
+  tags:
+    - atmos-purchase-payment
 
 Build:
   stage: build
