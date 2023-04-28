@@ -54,6 +54,8 @@ class PurchaseAndPaymentControllerTest {
 
     @MockBean
     private CheckPurchasedApp checkPurchasedAppImpl;
+
+    @MockBean
     private PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
 
     @Test
