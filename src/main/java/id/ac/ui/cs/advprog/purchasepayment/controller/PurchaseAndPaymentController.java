@@ -20,6 +20,7 @@ public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
     private final PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
+    private final PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
 
     @GetMapping("/test")
     public ResponseEntity<String> sayTest() {
@@ -54,5 +55,12 @@ public class PurchaseAndPaymentController {
     public ResponseEntity<Void> checkoutCart(@RequestBody CheckoutCartRequest request) {
         checkoutCartLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+//    @PreAuthorize("hasRole('ROLE_VIEWER')")
+    @DeleteMapping("/cart/{appId}")
+    public ResponseEntity<Void> deleteCart(@PathVariable String appId) {
+        deleteCartLogic.processLogic(appId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

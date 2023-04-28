@@ -13,4 +13,6 @@ public interface CartDetailsRepository extends CrudRepository<CartDetails, Integ
     Optional<CartDetails> findByCartUsernameAndAppId(String username, String appId);
     @Transactional
     void deleteByCartId(Integer cartId);
+    @Transactional
+    Integer deleteCartDetailsByCartUsernameAndAppId(String username, String appId);
 }
