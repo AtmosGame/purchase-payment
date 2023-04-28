@@ -14,16 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UpdateCartRequestProcessor implements RequestProcessor<UpdateCartRequest> {
     private Validator<UpdateCartRequest> validator;
     private Validator<UpdateCartRequest> appNotInCartValidator;
-
-    @Autowired
-    public void setAppNotInCartValidator(Validator<UpdateCartRequest> appNotInCartValidator) {
-        this.appNotInCartValidator = appNotInCartValidator;
-    }
-
+    private Validator<UpdateCartRequest> updateCartRequestDataValidator;
     @PostConstruct
     public void init() {
         UpdateCartRequestValidatorFactory factory = new UpdateCartRequestValidatorFactoryImpl();
-        Validator<UpdateCartRequest> updateCartRequestDataValidator = factory.createUpdateCartRequestDataValidator();
         Validator<UpdateCartRequest> appNotInListValidator = factory.createAppNotInListValidator();
         Validator<UpdateCartRequest> appNotInCheckoutValidator = factory.createAppNotInCheckoutValidator();
 
@@ -36,5 +30,14 @@ public class UpdateCartRequestProcessor implements RequestProcessor<UpdateCartRe
 
     public void validate(UpdateCartRequest request) {
         validator.isValid(request);
+    }
+    @Autowired
+    public void setAppNotInCartValidator(Validator<UpdateCartRequest> appNotInCartValidator) {
+        this.appNotInCartValidator = appNotInCartValidator;
+    }
+
+    @Autowired
+    public void setUpdateCartRequestDataValidator(Validator<UpdateCartRequest> updateCartRequestDataValidator) {
+        this.updateCartRequestDataValidator = updateCartRequestDataValidator;
     }
 }
