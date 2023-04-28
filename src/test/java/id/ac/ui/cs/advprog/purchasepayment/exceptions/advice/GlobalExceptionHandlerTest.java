@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.exceptions.advice;
 
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppNotInCartException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartDoesNotExistException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.ErrorTemplate;
 import org.assertj.core.api.Assertions;
@@ -24,31 +25,47 @@ class GlobalExceptionHandlerTest {
     @InjectMocks
     private GlobalExceptionHandler globalExceptionHandler;
     private String username;
+    private String appId;
 
     @BeforeEach
     public void setUp() {
         username = "test_username";
+        appId = "test_appId";
     }
 
-    @Test
-    void cartNotAvailable_shouldReturnErrorResponse() {
-        // arrange
-        CartDoesNotExistException exception = new CartDoesNotExistException(username);
-
+    void TestNotAvailableException(RuntimeException exception, String expectedErrorMessage) {
         // act
-        ResponseEntity<Object> response = globalExceptionHandler.cartNotAvailable(exception);
+        ResponseEntity<Object> response = globalExceptionHandler.notAvailable(exception);
         ErrorTemplate actualError = (ErrorTemplate) response.getBody();
 
         // assert
         HttpStatus expectedHttpStatus = HttpStatus.BAD_REQUEST;
-        String expectedErrorMessage = "Cart with username " + username + " does not exist";
         ZonedDateTime expectedTimestamp = ZonedDateTime.now(ZoneId.of("Z"));
         ErrorTemplate expectedError = new ErrorTemplate(expectedErrorMessage, expectedHttpStatus, expectedTimestamp);
 
         // assert
         Assertions.assertThat(expectedError.getHttpStatus()).isEqualTo(actualError.getHttpStatus());
         Assertions.assertThat(expectedError.getMessage()).isEqualTo(actualError.getMessage());
-        Assertions.assertThat(expectedError.getTimestamp().truncatedTo(ChronoUnit.SECONDS))
-                .isEqualTo(actualError.getTimestamp().truncatedTo(ChronoUnit.SECONDS));
+        Assertions.assertThat(expectedError.getTimestamp().truncatedTo(ChronoUnit.SECONDS)).isEqualTo(actualError.getTimestamp().truncatedTo(ChronoUnit.SECONDS));
+    }
+
+    @Test
+    void cartNotAvailableShouldReturnErrorResponse() {
+        // arrange
+        RuntimeException exception = new CartDoesNotExistException(username);
+        String expectedErrorMessage = "Cart with username " + username + " does not exist";
+
+        // test
+        TestNotAvailableException(exception, expectedErrorMessage);
+    }
+
+    @Test
+    void appNotAvailableShouldReturnErrorResponse() {
+        // arrange
+        RuntimeException exception = new AppNotInCartException(appId);
+        String expectedErrorMessage = String.format("App with id:%s does not exist in cart", appId);
+
+        // test
+        TestNotAvailableException(exception, expectedErrorMessage);
     }
 }

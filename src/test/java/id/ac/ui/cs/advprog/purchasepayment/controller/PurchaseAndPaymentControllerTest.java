@@ -41,6 +41,9 @@ class PurchaseAndPaymentControllerTest {
     @MockBean
     private PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
 
+    @MockBean
+    private PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
+
     @Test
     void testGetTest() throws Exception {
         MvcResult mvcResult = mockMvc.perform(get("/api/v1/test"))
@@ -105,8 +108,8 @@ class PurchaseAndPaymentControllerTest {
                 .build();
 
         mockMvc.perform(post("/api/v1/add-token")
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(addSecretTokenRequest)))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(addSecretTokenRequest)))
                 .andExpect(status().isCreated());
 
         verify(addSecretTokenLogic, times(1)).processLogic(addSecretTokenRequest);
@@ -120,10 +123,21 @@ class PurchaseAndPaymentControllerTest {
                 .build();
 
         mockMvc.perform(post("/api/v1/cart/checkout")
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(checkoutCartRequest)))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(checkoutCartRequest)))
                 .andExpect(status().isCreated());
 
         verify(checkoutCartLogic, times(1)).processLogic(checkoutCartRequest);
+    }
+
+    @Test
+    void testDeleteCart() throws Exception {
+        var appId = "1";
+        mockMvc.perform(delete("/api/v1/cart/" + appId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("deleteCart"));
+
+        verify(deleteCartLogic, times(1)).processLogic(appId);
     }
 }
