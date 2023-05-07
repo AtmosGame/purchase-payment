@@ -82,9 +82,9 @@ class GetCartImplTest {
         when(cartRepository.findByUsername(any(String.class)))
                 .thenReturn(Optional.empty());
 
-        String invalid_username = "<invalid_username>";
-        Assertions.assertThatThrownBy(() -> getCartImpl.findCartByUsername(invalid_username))
+        String invalidUsernam = "<invalid_username>";
+        Assertions.assertThatThrownBy(() -> getCartImpl.findCartByUsername(invalidUsernam))
                 .isInstanceOf(CartDoesNotExistException.class)
-                .hasMessageContaining("Cart with username " + invalid_username + " does not exist");
+                .hasMessageContaining("Cart with username " + invalidUsernam + " does not exist");
     }
 }

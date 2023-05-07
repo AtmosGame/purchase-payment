@@ -1,11 +1,17 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
+import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedResponse;
+import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
+import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
 import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckoutCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
+import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
+import id.ac.ui.cs.advprog.purchasepayment.web.processor.response.ResponseProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +26,10 @@ public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
     private final PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
+    private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
+    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
+    private final CheckPurchasedApp checkPurchasedAppImpl;
+    private final PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
 
     @GetMapping("/test")
     public ResponseEntity<String> sayTest() {
@@ -31,7 +41,13 @@ public class PurchaseAndPaymentController {
         updateCartLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    @PostMapping("/check-purchased")
+    public ResponseEntity<Boolean> checkPurchased(@RequestBody CheckPurchasedRequest request) {
+        CheckPurchasedLogic logic = new CheckPurchasedLogic(checkPurchasedRequestProcessor, checkPurchasedResponseProcessor, checkPurchasedAppImpl);
+        logic.processLogic(request);
+        boolean isPurchased = logic.getIsPurchased();
+        return new ResponseEntity<>(isPurchased,HttpStatus.CREATED);
+    }
     @PostMapping("/add-token")
     public ResponseEntity<Void> addToken(@RequestBody AddSecretTokenRequest request) {
         addSecretTokenLogic.processLogic(request);
@@ -54,5 +70,12 @@ public class PurchaseAndPaymentController {
     public ResponseEntity<Void> checkoutCart(@RequestBody CheckoutCartRequest request) {
         checkoutCartLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+//    @PreAuthorize("hasRole('ROLE_VIEWER')")
+    @DeleteMapping("/cart/{appId}")
+    public ResponseEntity<Void> deleteCart(@PathVariable String appId) {
+        deleteCartLogic.processLogic(appId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
