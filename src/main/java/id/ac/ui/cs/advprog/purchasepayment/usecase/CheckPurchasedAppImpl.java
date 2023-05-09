@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased;
+package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.UseCase;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;

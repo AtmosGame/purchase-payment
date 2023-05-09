@@ -56,9 +56,6 @@ Build:
   tags:
     - atmos-purchase-payment
 
-
-
-
 Test:
   stage: test
   image: gradle:jdk17-alpine

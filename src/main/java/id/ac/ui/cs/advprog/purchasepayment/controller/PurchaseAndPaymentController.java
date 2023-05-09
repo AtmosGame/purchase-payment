@@ -3,7 +3,7 @@ package id.ac.ui.cs.advprog.purchasepayment.controller;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;
-import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchasedApp;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
 import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;

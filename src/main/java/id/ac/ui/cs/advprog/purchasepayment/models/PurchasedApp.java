@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 
 @Data
 @Builder
@@ -18,9 +20,18 @@ public class PurchasedApp {
     @GeneratedValue
     private Integer id;
 
-//    @OneToOne(fetch = FetchType.EAGER)
-    private String userId;
+    @Column(nullable = false)
+    private String username;
 
-//    @OneToOne(fetch = FetchType.EAGER)
+    @Column(nullable = false)
     private String appId;
+
+    @Column(nullable = false)
+    private String appName;
+
+    @Column(nullable = false)
+    private Double appPrice;
+
+    @Column(nullable = false)
+    private Date purchasedDate;
 }

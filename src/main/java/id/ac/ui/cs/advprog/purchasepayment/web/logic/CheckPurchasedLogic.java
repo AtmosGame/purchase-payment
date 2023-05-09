@@ -3,7 +3,7 @@ package id.ac.ui.cs.advprog.purchasepayment.web.logic;
 import id.ac.ui.cs.advprog.purchasepayment.annotations.Logic;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedResponse;
-import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchasedApp;
 import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
 import id.ac.ui.cs.advprog.purchasepayment.web.processor.response.ResponseProcessor;
 import lombok.RequiredArgsConstructor;

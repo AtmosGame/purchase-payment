@@ -2,8 +2,7 @@ package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.purchasepayment.dto.*;
-import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
-import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchasedApp;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
 import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
 import id.ac.ui.cs.advprog.purchasepayment.web.processor.response.ResponseProcessor;
