@@ -22,9 +22,9 @@ class UpdateCartRequestValidatorFactoryImplTest {
     }
 
     @Test
-    void testCreateAppNotInListValidator() {
-        Validator<UpdateCartRequest> appNotInListValidator = factory.createAppNotInListValidator();
-        Assertions.assertThat(appNotInListValidator).isInstanceOf(AppNotInListValidator.class);
+    void testCreateAppNotInPurchasedAppValidator() {
+        Validator<UpdateCartRequest> appNotInPurchasedAppValidator = factory.createAppNotInPurchasedAppValidator();
+        Assertions.assertThat(appNotInPurchasedAppValidator).isInstanceOf(AppNotInPurchasedAppValidator.class);
     }
 
     @Test

@@ -18,7 +18,7 @@ public class UpdateCartRequestProcessor implements RequestProcessor<UpdateCartRe
     @PostConstruct
     public void init() {
         UpdateCartRequestValidatorFactory factory = new UpdateCartRequestValidatorFactoryImpl();
-        Validator<UpdateCartRequest> appNotInListValidator = factory.createAppNotInListValidator();
+        Validator<UpdateCartRequest> appNotInListValidator = factory.createAppNotInPurchasedAppValidator();
         Validator<UpdateCartRequest> appNotInCheckoutValidator = factory.createAppNotInCheckoutValidator();
 
         updateCartRequestDataValidator.setNextValidator(appNotInListValidator);

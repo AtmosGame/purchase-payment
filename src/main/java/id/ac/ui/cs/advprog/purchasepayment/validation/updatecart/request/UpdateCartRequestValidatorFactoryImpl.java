@@ -10,8 +10,8 @@ public class UpdateCartRequestValidatorFactoryImpl implements  UpdateCartRequest
     }
 
     @Override
-    public Validator<UpdateCartRequest> createAppNotInListValidator() {
-        return new AppNotInListValidator();
+    public Validator<UpdateCartRequest> createAppNotInPurchasedAppValidator() {
+        return new AppNotInPurchasedAppValidator();
     }
 
     @Override

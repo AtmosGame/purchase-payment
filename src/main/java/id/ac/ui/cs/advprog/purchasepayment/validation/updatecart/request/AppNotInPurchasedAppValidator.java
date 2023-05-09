@@ -1,22 +1,22 @@
 package id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInListException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInPurchasedAppException;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 
-public class AppNotInListValidator extends Validator<UpdateCartRequest> {
+public class AppNotInPurchasedAppValidator extends Validator<UpdateCartRequest> {
     @Override
     public boolean isValid(UpdateCartRequest request) {
-        if (appNotInList(request)) {
+        if (appNotInPurchasedApp(request)) {
             nextValidatorIsValid(request);
         } else {
-            throw new AppAlreadyInListException(request.getName(), request.getId());
+            throw new AppAlreadyInPurchasedAppException(request.getName(), request.getId());
         }
 
         return true;
     }
 
-    public boolean appNotInList(UpdateCartRequest request) {
+    public boolean appNotInPurchasedApp(UpdateCartRequest request) {
         return true;
     }
 }
