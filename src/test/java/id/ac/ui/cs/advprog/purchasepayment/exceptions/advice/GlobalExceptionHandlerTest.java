@@ -50,6 +50,12 @@ class GlobalExceptionHandlerTest {
     @MockBean
     private PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
 
+    @MockBean
+    private PurchaseAndPaymentLogic<CheckPurchasedRequest, Boolean> checkPurchasedLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
+
     @InjectMocks
     private GlobalExceptionHandler globalExceptionHandler;
     private String username;
