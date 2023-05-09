@@ -1,9 +1,13 @@
 package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
+import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
+import java.util.*;
+
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckoutCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInCartException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartDoesNotExistException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartIsEmptyException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.models.Checkout;
@@ -13,23 +17,12 @@ import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import org.mockito.*;
 
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class CheckoutCartImplTest {
-    private CheckoutCartRequest request;
-    private Cart userCart;
-    private CartDetails cartDetails;
+
     @Mock
     private CheckoutRepository checkoutRepository;
 
@@ -46,10 +39,16 @@ class CheckoutCartImplTest {
     private CartDetailsRepository cartDetailsRepository;
     private String username;
     private Checkout userCheckout;
+    private Cart userCart;
+    private CartDetails cartDetails;
+    private CheckoutCartRequest request;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+
         username = "<requestor_username>";
+
         request = CheckoutCartRequest.builder()
                 .id(1)
                 .username(username)
@@ -57,7 +56,7 @@ class CheckoutCartImplTest {
 
         userCart = Cart.builder()
                 .id(1)
-                .username(request.getUsername())
+                .username(username)
                 .build();
 
         cartDetails = CartDetails.builder()
@@ -68,16 +67,136 @@ class CheckoutCartImplTest {
                 .appPrice(399399.0)
                 .cart(userCart)
                 .build();
-        userCheckout = Checkout.builder()
-                .id(1)
-                .statusPembayaran("Menunggu Pembayaran")
-                .build();
+    }
+
+//    @Test
+//    void testCheckout_success() {
+//        CheckoutCartRequest request = new CheckoutCartRequest(1, "user1");
+//        when(checkoutRepository.save(any())).thenReturn(new Checkout(1, "Menunggu Pembayaran","user1", LocalDateTime.now()));
+//        Checkout checkout = checkoutCartImpl.checkout(request);
+//        assertNotNull(checkout);
+//        assertEquals(request.getUsername(), checkout.getUsername());
+//    }
+
+    @Test
+    void testCheckout_cartIsEmpty() {
+        CheckoutCartRequest request = new CheckoutCartRequest(2, "user2");
+        assertThrows(CartIsEmptyException.class, () -> {checkoutCartImpl.checkout(request);});
     }
 
     @Test
-    void testCheckout() {
-        doReturn(userCheckout).when(checkoutCartImpl).checkout(request);
-        Checkout result = checkoutCartImpl.checkout(request);
-        Assertions.assertThat(userCheckout).isEqualTo(result);
+    void testCheckCheckoutTime_expired() {
+        // arrange
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiredTime = now.minusMinutes(4);
+        Checkout checkout = new Checkout();
+        checkout.setWaktuPembuatanCheckout(expiredTime);
+        checkout.setStatusPembayaran("Menunggu Pembayaran");
+        List<Checkout> checkouts = Collections.singletonList(checkout);
+        when(checkoutRepository.findAll()).thenReturn(checkouts);
+        // act
+        checkoutCartImpl.checkCheckoutTime();
+        // assert
+        verify(checkoutRepository).save(checkout);
+        assertEquals("Expired", checkout.getStatusPembayaran());
+    }
+
+    @Test
+    void testCheckCheckoutTime_notExpired() {
+        // arrange
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime notExpiredTime = now.minusMinutes(2);
+        Checkout checkout = new Checkout();
+        checkout.setWaktuPembuatanCheckout(notExpiredTime);
+        checkout.setStatusPembayaran("Menunggu Pembayaran");
+        List<Checkout> checkouts = Collections.singletonList(checkout);
+        when(checkoutRepository.findAll()).thenReturn(checkouts);
+        // act
+        checkoutCartImpl.checkCheckoutTime();
+        // assert
+        verify(checkoutRepository).save(checkout);
+        assertEquals("Menunggu Pembayaran", checkout.getStatusPembayaran());
+    }
+
+    @Test
+    void testCheckCheckoutTime_multipleCheckouts() {
+        // arrange
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiredTime1 = now.minusMinutes(4);
+        LocalDateTime expiredTime2 = now.minusMinutes(5);
+        LocalDateTime notExpiredTime = now.minusMinutes(2);
+        Checkout checkout1 = new Checkout();
+        checkout1.setWaktuPembuatanCheckout(expiredTime1);
+        checkout1.setStatusPembayaran("Menunggu Pembayaran");
+        Checkout checkout2 = new Checkout();
+        checkout2.setWaktuPembuatanCheckout(expiredTime2);
+        checkout2.setStatusPembayaran("Menunggu Pembayaran");
+        Checkout checkout3 = new Checkout();
+        checkout3.setWaktuPembuatanCheckout(notExpiredTime);
+        checkout3.setStatusPembayaran("Menunggu Pembayaran");
+        List<Checkout> checkouts = Arrays.asList(checkout1, checkout2, checkout3);
+        when(checkoutRepository.findAll()).thenReturn(checkouts);
+        // act
+        checkoutCartImpl.checkCheckoutTime();
+        // assert
+        verify(checkoutRepository, times(3)).save(any(Checkout.class));
+        assertEquals("Expired", checkout1.getStatusPembayaran());
+        assertEquals("Expired", checkout2.getStatusPembayaran());
+        assertEquals("Menunggu Pembayaran", checkout3.getStatusPembayaran());
+    }
+
+    @Test
+    void getCheckoutByUsername_existingCheckout_returnsCheckout() {
+        String username = "testuser";
+        Checkout expected = Checkout.builder().username(username).build();
+        when(checkoutRepository.findByUsername(username)).thenReturn(Optional.of(expected));
+
+        Checkout actual = checkoutCartImpl.getCheckoutByUsername(username);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getCheckoutByUsername_newCheckout_returnsSavedCheckout() {
+        String username = "testuser";
+        Checkout expected = Checkout.builder().username(username).build();
+        when(checkoutRepository.findByUsername(username)).thenReturn(Optional.empty());
+        when(checkoutRepository.save(expected)).thenReturn(expected);
+
+        Checkout actual = checkoutCartImpl.getCheckoutByUsername(username);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testFindByUsernameAndFoundShouldReturnCart() {
+        // arrange
+        List<CartDetails> userCartDetails = List.of(cartDetails);
+        when(cartRepository.findByUsername(username))
+                .thenReturn(Optional.of(userCart));
+        when(cartDetailsRepository.findAllByCartId(userCart.getId()))
+                .thenReturn(userCartDetails);
+
+        // act
+        GetCartResponse response = checkoutCartImpl.getCartByUsername(username);
+
+        // assert
+        verify(cartRepository, atLeastOnce())
+                .findByUsername(any(String.class));
+        verify(cartDetailsRepository, atLeastOnce())
+                .findAllByCartId(any(Integer.class));
+        GetCartResponse expectedResponse = GetCartResponse.fromCart(userCart, userCartDetails);
+        Assertions.assertThat(response).isEqualTo(expectedResponse);
+    }
+
+    @Test
+    void testFindCartByUsernameAndNotFoundShouldThrowException() {
+        when(cartRepository.findByUsername(any(String.class)))
+                .thenReturn(Optional.empty());
+
+        String invalidUsernam = "<invalid_username>";
+        Assertions.assertThatThrownBy(() -> checkoutCartImpl.getCartByUsername(invalidUsernam))
+                .isInstanceOf(CartDoesNotExistException.class)
+                .hasMessageContaining("Cart with username " + invalidUsernam + " does not exist");
     }
 }

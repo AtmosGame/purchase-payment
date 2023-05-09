@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -21,4 +21,10 @@ public class Checkout {
 
     @Column(nullable = false)
     private String statusPembayaran;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column
+    private LocalDateTime waktuPembuatanCheckout;
 }
