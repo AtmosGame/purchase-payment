@@ -97,22 +97,11 @@ class UpdateCartImplTest {
 
     @Test
     void testAddCartDetailsToCartByRequestWhenAppIsNotInCart() {
-        doReturn(true).when(updateCartImpl).isAppNotInCart(request);
         when(cartDetailsRepository.save(any(CartDetails.class))).thenReturn(cartDetails);
         CartDetails result = updateCartImpl.addCartDetailsToCartByRequest(request, userCart);
 
         verify(cartDetailsRepository, times(1)).save(any(CartDetails.class));
         Assertions.assertThat(cartDetails).isEqualTo(result);
-    }
-
-    @Test
-    void testAddCartDetailsToCartByRequestWhenAppIsInCart() {
-        doReturn(false).when(updateCartImpl).isAppNotInCart(request);
-        Assertions.assertThatThrownBy(() -> updateCartImpl.addCartDetailsToCartByRequest(request, userCart))
-                .isInstanceOf(AppAlreadyInCartException.class)
-                .hasMessage(String.format("App %s with id:%s already exist in cart",
-                        request.getName(),
-                        request.getId()));
     }
 
     @Test
@@ -123,14 +112,5 @@ class UpdateCartImplTest {
 
         Optional<CartDetails> result = updateCartImpl.findCartDetailsByCartUsernameAndAppId(request.getUsername(), request.getId());
         Assertions.assertThat(expected).isEqualTo(result);
-    }
-
-    @Test
-    void testIsAppNotInCartTrue() {
-        doReturn(Optional.empty()).when(updateCartImpl).findCartDetailsByCartUsernameAndAppId(
-                request.getUsername(),
-                request.getId());
-        boolean result = updateCartImpl.isAppNotInCart(request);
-        Assertions.assertThat(result).isTrue();
     }
 }
