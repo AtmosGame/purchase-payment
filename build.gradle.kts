@@ -2,8 +2,16 @@ plugins {
     java
     id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
-    id("org.sonarqube") version "3.2.0"
+    id("org.sonarqube") version "4.0.0.2929"
     jacoco
+
+}
+
+sonarqube {
+    properties {
+        property ("sonar.projectKey", "atmos-purchase-payment")
+        property ("sonar.organization", "atmos-purchase-payment")
+    }
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -23,6 +31,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:3.0.4")
     testImplementation("junit:junit:4.13.1")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")

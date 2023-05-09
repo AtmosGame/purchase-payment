@@ -2,8 +2,13 @@ package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.purchasepayment.dto.*;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
+import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
+import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
+import id.ac.ui.cs.advprog.purchasepayment.web.processor.response.ResponseProcessor;
 import org.assertj.core.api.Assertions;
+import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -40,6 +45,18 @@ class PurchaseAndPaymentControllerTest {
 
     @MockBean
     private PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
+
+    @MockBean
+    private RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
+
+    @MockBean
+    private ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
+
+    @MockBean
+    private CheckPurchasedApp checkPurchasedAppImpl;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
 
     @Test
     void testGetTest() throws Exception {
@@ -105,8 +122,8 @@ class PurchaseAndPaymentControllerTest {
                 .build();
 
         mockMvc.perform(post("/api/v1/add-token")
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(addSecretTokenRequest)))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(addSecretTokenRequest)))
                 .andExpect(status().isCreated());
 
         verify(addSecretTokenLogic, times(1)).processLogic(addSecretTokenRequest);
@@ -120,10 +137,42 @@ class PurchaseAndPaymentControllerTest {
                 .build();
 
         mockMvc.perform(post("/api/v1/cart/checkout")
-                    .contentType("application/json")
-                    .content(objectMapper.writeValueAsString(checkoutCartRequest)))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(checkoutCartRequest)))
                 .andExpect(status().isCreated());
 
         verify(checkoutCartLogic, times(1)).processLogic(checkoutCartRequest);
+    }
+
+    @Test
+    void testCheckPurchasedApp() throws Exception {
+        CheckPurchasedRequest request = CheckPurchasedRequest.builder()
+                .appId("app-id")
+                .userId("user-id")
+                .build();
+
+        // when
+        MvcResult result = mockMvc.perform(post("/api/v1/check-purchased")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        // then
+        String content = result.getResponse().getContentAsString();
+        boolean isPurchased = objectMapper.readValue(content, Boolean.class);
+        verify(checkPurchasedAppImpl, times(1)).isPurchased(request);
+        assertEquals(false, isPurchased);
+    }
+
+    @Test
+    void testDeleteCart() throws Exception {
+        var appId = "1";
+        mockMvc.perform(delete("/api/v1/cart/" + appId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("deleteCart"));
+
+        verify(deleteCartLogic, times(1)).processLogic(appId);
     }
 }

@@ -1,6 +1,9 @@
 package id.ac.ui.cs.advprog.purchasepayment.exceptions.advice;
 
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.*;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppNotInCartException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartDoesNotExistException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.ErrorTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,13 +16,14 @@ import java.time.ZonedDateTime;
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = {
             CartDoesNotExistException.class,
+            AppNotInCartException.class,
             RequestDataInvalidException.class,
             AppAlreadyInListException.class,
             AppAlreadyInCartException.class,
             AppAlreadyInCheckoutException.class,
-            CheckoutIsExpiredException.class
+            CheckoutIsExpiredException.class,
     })
-    public ResponseEntity<Object> cartNotAvailable(Exception exception) {
+    public ResponseEntity<Object> notAvailable(Exception exception) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         var baseException = new ErrorTemplate(
                 exception.getMessage(),

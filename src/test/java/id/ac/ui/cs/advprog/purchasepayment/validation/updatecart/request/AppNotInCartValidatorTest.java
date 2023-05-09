@@ -2,20 +2,26 @@ package id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInCartException;
+import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AppNotInCartValidatorTest {
     @Spy
+    @InjectMocks
     private AppNotInCartValidator appNotInCartValidator;
+    @Mock
+    private CartDetailsRepository cartDetailsRepository;
     private UpdateCartRequest request;
 
     @BeforeEach
@@ -53,5 +59,19 @@ class AppNotInCartValidatorTest {
                 .hasMessage(String.format("App %s with id:%s already exist in cart",
                         request.getName(),
                         request.getId()));
+    }
+
+    @Test
+    void testAppNotIsFalse() {
+        doReturn(true).when(cartDetailsRepository).existsByCartUsernameAndAppId(request.getUsername(), request.getId());
+        appNotInCartValidator.appNotInCart(request);
+        verify(cartDetailsRepository, times(1)).existsByCartUsernameAndAppId(request.getUsername(), request.getId());
+    }
+
+    @Test
+    void testAppNotIsTrue() {
+        doReturn(false).when(cartDetailsRepository).existsByCartUsernameAndAppId(request.getUsername(), request.getId());
+        appNotInCartValidator.appNotInCart(request);
+        verify(cartDetailsRepository, times(1)).existsByCartUsernameAndAppId(request.getUsername(), request.getId());
     }
 }
