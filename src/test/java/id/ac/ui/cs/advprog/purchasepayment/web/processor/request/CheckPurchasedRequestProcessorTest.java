@@ -23,7 +23,7 @@ class CheckPurchasedRequestProcessorTest {
     @BeforeEach
     void setUp() {
         request = CheckPurchasedRequest.builder()
-                .userId("user-id")
+                .username("user-id")
                 .appId("app-id")
                 .build();
     }

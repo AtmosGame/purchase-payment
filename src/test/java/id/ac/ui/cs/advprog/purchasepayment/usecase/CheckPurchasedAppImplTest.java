@@ -25,11 +25,11 @@ class CheckPurchasedAppImplTest {
 
         CheckPurchasedRequest request = CheckPurchasedRequest.builder()
                 .appId(appId)
-                .userId(userId)
+                .username(userId)
                 .build();
 
         when(purchasedAppRepository.existsPurchasedAppByAppId(appId)).thenReturn(true);
-        when(purchasedAppRepository.existsPurchasedAppByUserId(userId)).thenReturn(true);
+        when(purchasedAppRepository.existsPurchasedAppByUsername(userId)).thenReturn(true);
 
 
         checkPurchasedApp = new CheckPurchasedAppImpl(purchasedAppRepository);
@@ -45,11 +45,11 @@ class CheckPurchasedAppImplTest {
 
         CheckPurchasedRequest request = CheckPurchasedRequest.builder()
                 .appId(appId)
-                .userId(userId)
+                .username(userId)
                 .build();
 
         when(purchasedAppRepository.existsPurchasedAppByAppId(appId)).thenReturn(false);
-        when(purchasedAppRepository.existsPurchasedAppByUserId(userId)).thenReturn(true);
+        when(purchasedAppRepository.existsPurchasedAppByUsername(userId)).thenReturn(true);
 
         checkPurchasedApp = new CheckPurchasedAppImpl(purchasedAppRepository);
 
@@ -63,11 +63,11 @@ class CheckPurchasedAppImplTest {
 
         CheckPurchasedRequest request = CheckPurchasedRequest.builder()
                 .appId(appId)
-                .userId(userId)
+                .username(userId)
                 .build();
 
         when(purchasedAppRepository.existsPurchasedAppByAppId(appId)).thenReturn(true);
-        when(purchasedAppRepository.existsPurchasedAppByUserId(userId)).thenReturn(false);
+        when(purchasedAppRepository.existsPurchasedAppByUsername(userId)).thenReturn(false);
 
         checkPurchasedApp = new CheckPurchasedAppImpl(purchasedAppRepository);
 

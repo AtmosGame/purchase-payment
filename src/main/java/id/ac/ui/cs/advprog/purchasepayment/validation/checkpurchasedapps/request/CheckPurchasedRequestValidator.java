@@ -6,7 +6,7 @@ import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 public class CheckPurchasedRequestValidator extends Validator<CheckPurchasedRequest> {
     @Override
     public boolean isValid(CheckPurchasedRequest request) {
-        String userId = request.getUserId();
+        String userId = request.getUsername();
         String appId = request.getAppId();
 
         if (appId.equals("")) {

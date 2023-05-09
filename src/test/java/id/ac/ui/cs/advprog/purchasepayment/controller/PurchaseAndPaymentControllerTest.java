@@ -147,7 +147,7 @@ class PurchaseAndPaymentControllerTest {
     void testCheckPurchasedApp() throws Exception {
         CheckPurchasedRequest request = CheckPurchasedRequest.builder()
                 .appId("app-id")
-                .userId("user-id")
+                .username("username")
                 .build();
 
         // when
