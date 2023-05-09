@@ -15,14 +15,15 @@ public class UpdateCartRequestProcessor implements RequestProcessor<UpdateCartRe
     private Validator<UpdateCartRequest> validator;
     private Validator<UpdateCartRequest> appNotInCartValidator;
     private Validator<UpdateCartRequest> updateCartRequestDataValidator;
+    private Validator<UpdateCartRequest> appNotInPurchasedAppValidator;
+
     @PostConstruct
     public void init() {
         UpdateCartRequestValidatorFactory factory = new UpdateCartRequestValidatorFactoryImpl();
-        Validator<UpdateCartRequest> appNotInListValidator = factory.createAppNotInPurchasedAppValidator();
         Validator<UpdateCartRequest> appNotInCheckoutValidator = factory.createAppNotInCheckoutValidator();
 
-        updateCartRequestDataValidator.setNextValidator(appNotInListValidator);
-        appNotInListValidator.setNextValidator(appNotInCartValidator);
+        updateCartRequestDataValidator.setNextValidator(appNotInPurchasedAppValidator);
+        appNotInPurchasedAppValidator.setNextValidator(appNotInCartValidator);
         appNotInCartValidator.setNextValidator(appNotInCheckoutValidator);
 
         validator = updateCartRequestDataValidator;
@@ -39,5 +40,10 @@ public class UpdateCartRequestProcessor implements RequestProcessor<UpdateCartRe
     @Autowired
     public void setUpdateCartRequestDataValidator(Validator<UpdateCartRequest> updateCartRequestDataValidator) {
         this.updateCartRequestDataValidator = updateCartRequestDataValidator;
+    }
+
+    @Autowired
+    public void setAppNotInPurchasedAppValidator(Validator<UpdateCartRequest> appNotInPurchasedAppValidator) {
+        this.appNotInPurchasedAppValidator = appNotInPurchasedAppValidator;
     }
 }
