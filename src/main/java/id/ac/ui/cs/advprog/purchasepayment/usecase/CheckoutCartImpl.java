@@ -38,12 +38,10 @@ public class CheckoutCartImpl implements CheckoutCart {
     public GetCartResponse getCartByUsername(String username) {
         var cart = cartRepository.findByUsername(username).orElse(null);
 
-        // validate
         if (cart == null) {
             throw new CartDoesNotExistException(username);
         }
 
-        // get cartDetails by cartId
         List<CartDetails> cartDetails = cartDetailsRepository.findAllByCartId(cart.getId());
         return GetCartResponse.fromCart(cart, cartDetails);
     }

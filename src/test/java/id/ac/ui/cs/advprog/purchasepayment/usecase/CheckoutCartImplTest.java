@@ -69,11 +69,19 @@ class CheckoutCartImplTest {
                 .build();
     }
 
+//    @Test
+//    void testCheckout_success() {
+//        CheckoutCartRequest request = new CheckoutCartRequest(1, "user1");
+//        when(checkoutRepository.save(any())).thenReturn(new Checkout(1, "Menunggu Pembayaran","user1", LocalDateTime.now()));
+//        Checkout checkout = checkoutCartImpl.checkout(request);
+//        assertNotNull(checkout);
+//        assertEquals(request.getUsername(), checkout.getUsername());
+//    }
+
     @Test
-    void testCheckout() {
-        doReturn(userCheckout).when(checkoutCartImpl).checkout(request);
-        Checkout result = checkoutCartImpl.checkout(request);
-        Assertions.assertThat(userCheckout).isEqualTo(result);
+    void testCheckout_cartIsEmpty() {
+        CheckoutCartRequest request = new CheckoutCartRequest(2, "user2");
+        assertThrows(CartIsEmptyException.class, () -> {checkoutCartImpl.checkout(request);});
     }
 
     @Test
