@@ -26,9 +26,10 @@ public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
     private final PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
-    private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
-    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
-    private final CheckPurchasedApp checkPurchasedAppImpl;
+    private final PurchaseAndPaymentLogic<CheckPurchasedRequest, Boolean> checkPurchasedLogic;
+//    private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
+//    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
+//    private final CheckPurchasedApp checkPurchasedAppImpl;
     private final PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
 
     @GetMapping("/test")
@@ -43,9 +44,7 @@ public class PurchaseAndPaymentController {
     }
     @PostMapping("/check-purchased")
     public ResponseEntity<Boolean> checkPurchased(@RequestBody CheckPurchasedRequest request) {
-        CheckPurchasedLogic logic = new CheckPurchasedLogic(checkPurchasedRequestProcessor, checkPurchasedResponseProcessor, checkPurchasedAppImpl);
-        logic.processLogic(request);
-        boolean isPurchased = logic.getIsPurchased();
+        Boolean isPurchased = checkPurchasedLogic.processLogic(request);
         return new ResponseEntity<>(isPurchased,HttpStatus.CREATED);
     }
     @PostMapping("/add-token")

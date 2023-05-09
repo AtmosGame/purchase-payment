@@ -46,13 +46,7 @@ class PurchaseAndPaymentControllerTest {
     private PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
 
     @MockBean
-    private RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
-
-    @MockBean
-    private ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
-
-    @MockBean
-    private CheckPurchasedApp checkPurchasedAppImpl;
+    private PurchaseAndPaymentLogic<CheckPurchasedRequest, Boolean> checkPurchasedLogic;
 
     @MockBean
     private PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
@@ -151,17 +145,14 @@ class PurchaseAndPaymentControllerTest {
                 .build();
 
         // when
-        MvcResult result = mockMvc.perform(post("/api/v1/check-purchased")
+        mockMvc.perform(post("/api/v1/check-purchased")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andReturn();
 
         // then
-        String content = result.getResponse().getContentAsString();
-        boolean isPurchased = objectMapper.readValue(content, Boolean.class);
-        verify(checkPurchasedAppImpl, times(1)).isPurchased(request);
-        assertEquals(false, isPurchased);
+        verify(checkPurchasedLogic, times(1)).processLogic(request);
     }
 
     @Test

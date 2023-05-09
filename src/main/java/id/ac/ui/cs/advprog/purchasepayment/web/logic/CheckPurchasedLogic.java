@@ -10,20 +10,20 @@ import lombok.RequiredArgsConstructor;
 
 @Logic
 @RequiredArgsConstructor
-public class CheckPurchasedLogic implements PurchaseAndPaymentLogic<CheckPurchasedRequest, Void>{
-    private final RequestProcessor<CheckPurchasedRequest> CheckPurchasedRequestProcessor;
-    private final ResponseProcessor<CheckPurchasedResponse, Boolean> CheckPurchasedResponseProcessor;
+public class CheckPurchasedLogic implements PurchaseAndPaymentLogic<CheckPurchasedRequest, Boolean>{
+    private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
+    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
     private final CheckPurchasedApp checkPurchasedAppImpl;
-    private Boolean isPurchased;
+    public Boolean isPurchased;
 
 
     @Override
-    public Void processLogic(CheckPurchasedRequest request) {
-        CheckPurchasedRequestProcessor.validate(request);
+    public Boolean processLogic(CheckPurchasedRequest request) {
+        checkPurchasedRequestProcessor.validate(request);
         this.isPurchased = checkPurchasedAppImpl.isPurchased(request);
         CheckPurchasedResponse response = new CheckPurchasedResponse(isPurchased);
-        CheckPurchasedResponseProcessor.process(response);
-        return null;
+        checkPurchasedResponseProcessor.process(response);
+        return isPurchased;
     }
     public Boolean getIsPurchased() {
         return isPurchased;

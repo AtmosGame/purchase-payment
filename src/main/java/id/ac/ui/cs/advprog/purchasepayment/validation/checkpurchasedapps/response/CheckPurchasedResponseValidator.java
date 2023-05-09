@@ -10,7 +10,7 @@ public class CheckPurchasedResponseValidator extends Validator<CheckPurchasedRes
 
 
         if (isPurchased == null) {
-            // TODO: throw error
+            throw new NullPointerException();
         }
         return true;
     }
