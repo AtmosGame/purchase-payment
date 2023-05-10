@@ -1,13 +1,10 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
+import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.*;
 import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
-import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
-import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
-import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
-import id.ac.ui.cs.advprog.purchasepayment.web.processor.response.ResponseProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +21,7 @@ public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<String, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
     private final PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
-    private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
-    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
-    private final CheckPurchasedApp checkPurchasedAppImpl;
+    private final PurchaseAndPaymentLogic<CheckPurchasedRequest, Boolean> checkPurchasedLogic;
     private final PurchaseAndPaymentLogic<DeleteCartRequest, Void> deleteCartLogic;
 
     private static User getCurrentUser() {
@@ -48,9 +43,7 @@ public class PurchaseAndPaymentController {
     }
     @PostMapping("/check-purchased")
     public ResponseEntity<Boolean> checkPurchased(@RequestBody CheckPurchasedRequest request) {
-        CheckPurchasedLogic logic = new CheckPurchasedLogic(checkPurchasedRequestProcessor, checkPurchasedResponseProcessor, checkPurchasedAppImpl);
-        logic.processLogic(request);
-        boolean isPurchased = logic.getIsPurchased();
+        Boolean isPurchased = checkPurchasedLogic.processLogic(request);
         return new ResponseEntity<>(isPurchased,HttpStatus.CREATED);
     }
     @PostMapping("/add-token")
