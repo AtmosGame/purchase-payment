@@ -24,13 +24,20 @@ public class CheckoutCartImpl implements CheckoutCart {
     private final CartRepository cartRepository;
     private final CartDetailsRepository cartDetailsRepository;
     private final CheckoutRepository checkoutRepository;
+    private final DeleteCart deleteCart;
 
     @Override
     public Checkout checkout(CheckoutCartRequest request) {
         if (checkCartIsEmpty(request.getUsername())){
             throw new CartIsEmptyException(request.getUsername());
         }
-        var userCheckout = Checkout.builder().username(request.getUsername()).statusPembayaran("Menunggu Pembayaran").waktuPembuatanCheckout(LocalDateTime.now()).build();
+        Cart cart = findCartByUsername(request.getUsername()).get();
+        List<CartDetails> cartDetails = cart.getCartDetails();
+        var userCheckout = Checkout.builder().username(request.getUsername()).statusPembayaran("Menunggu Pembayaran")
+                .waktuPembuatanCheckout(LocalDateTime.now()).cart(cart).build();
+        for (CartDetails details: cartDetails){
+            deleteCart.deleteCartByAppId(request.getUsername(), details.getAppId());
+        }
         return checkoutRepository.save(userCheckout);
     }
 
