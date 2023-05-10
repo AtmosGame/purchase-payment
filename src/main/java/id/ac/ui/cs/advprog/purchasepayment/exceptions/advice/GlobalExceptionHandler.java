@@ -22,6 +22,8 @@ public class GlobalExceptionHandler {
             AppAlreadyInCartException.class,
             AppAlreadyInCheckoutException.class,
             CheckoutIsExpiredException.class,
+            AppIsNotAvailableException.class,
+            UsernameIsNotAvailableException.class
     })
     public ResponseEntity<Object> notAvailable(Exception exception) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;

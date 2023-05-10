@@ -12,9 +12,9 @@ public class CheckPurchasedRequestValidator extends Validator<CheckPurchasedRequ
         String appId = request.getAppId();
 
         if (appId.equals("")) {
-            throw new AppIsNotAvailableException(appId);
+            throw new AppIsNotAvailableException();
         } else if (username.equals("")) {
-            throw new UsernameIsNotAvailableException(username);
+            throw new UsernameIsNotAvailableException();
         }
         return true;
     }
