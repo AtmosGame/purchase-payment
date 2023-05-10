@@ -73,18 +73,31 @@ class GetCartImplTest {
                 .findByUsername(any(String.class));
         verify(cartDetailsRepository, atLeastOnce())
                 .findAllByCartId(any(Integer.class));
+        verify(getCartImpl, atLeastOnce())
+                .getCartByUsername(any(String.class));
         GetCartResponse expectedResponse = GetCartResponse.fromCart(userCart, userCartDetails);
         Assertions.assertThat(response).isEqualTo(expectedResponse);
     }
 
     @Test
-    void testFindCartByUsernameAndNotFoundShouldThrowException() {
+    void testGetCartByUsernameWithNonEmptyOptional() {
+        Optional<Cart> expected = Optional.of(userCart);
+        when(cartRepository.findByUsername(username))
+                .thenReturn(expected);
+
+
+        Cart result = getCartImpl.getCartByUsername(username);
+        verify(cartRepository, atLeastOnce())
+                .findByUsername(any(String.class));
+        Assertions.assertThat(userCart).isEqualTo(result);
+    }
+
+    @Test
+    void testGetCartByUsernameWithEmptyOptional() {
         when(cartRepository.findByUsername(any(String.class)))
                 .thenReturn(Optional.empty());
 
-        String invalidUsernam = "<invalid_username>";
-        Assertions.assertThatThrownBy(() -> getCartImpl.findCartByUsername(invalidUsernam))
-                .isInstanceOf(CartDoesNotExistException.class)
-                .hasMessageContaining("Cart with username " + invalidUsernam + " does not exist");
+        getCartImpl.getCartByUsername("<invalid_username>");
+        verify(cartRepository, times(1)).save(any(Cart.class));
     }
 }
