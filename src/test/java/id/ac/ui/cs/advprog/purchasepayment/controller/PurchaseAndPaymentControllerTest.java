@@ -2,21 +2,32 @@ package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.purchasepayment.dto.*;
+import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
 import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased.CheckPurchasedApp;
-import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.JwtService;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
 import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
 import id.ac.ui.cs.advprog.purchasepayment.web.processor.response.ResponseProcessor;
 import org.assertj.core.api.Assertions;
+
 import static org.junit.Assert.assertEquals;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,17 +36,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = PurchaseAndPaymentController.class)
 @AutoConfigureMockMvc
 class PurchaseAndPaymentControllerTest {
-    @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @MockBean
+    private JwtService jwtService;
+
+    @Mock
+    User user;
+
+    @MockBean
     private PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
 
     @MockBean
-    private PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
+    private PurchaseAndPaymentLogic<String, GetCartResponse> getCartLogic;
 
     @MockBean
     private PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
@@ -56,7 +75,17 @@ class PurchaseAndPaymentControllerTest {
     private CheckPurchasedApp checkPurchasedAppImpl;
 
     @MockBean
-    private PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
+    private PurchaseAndPaymentLogic<DeleteCartRequest, Void> deleteCartLogic;
+
+    @BeforeEach
+    void setUp() {
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
+        SecurityContextHolder.setContext(securityContext);
+        this.mockMvc  = MockMvcBuilders.webAppContextSetup(this.context).build();
+    }
 
     @Test
     void testGetTest() throws Exception {
@@ -85,19 +114,23 @@ class PurchaseAndPaymentControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     void testGetCart() throws Exception {
-        GetCartResponse getCartResponse = new GetCartResponse();
-        getCartResponse.setId(1);
+        var username = user.getUsername();
+        GetCartResponse cartResponse = GetCartResponse.builder()
+                .id(1)
+                .username(username)
+                .build();
 
-        when(getCartLogic.processLogic(null)).thenReturn(getCartResponse);
+        when(getCartLogic.processLogic(username)).thenReturn(cartResponse);
 
         mockMvc.perform(get("/api/v1/cart")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(handler().methodName("getCart"))
-                .andExpect(jsonPath("$.id").value(String.valueOf(getCartResponse.getId())));
+                .andExpect(jsonPath("$.id").value(cartResponse.getId()));
 
-        verify(getCartLogic, atLeastOnce()).processLogic(null);
+        verify(getCartLogic, atLeastOnce()).processLogic(username);
     }
 
     @Test
@@ -166,13 +199,18 @@ class PurchaseAndPaymentControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     void testDeleteCart() throws Exception {
-        var appId = "1";
-        mockMvc.perform(delete("/api/v1/cart/" + appId)
+        DeleteCartRequest deleteCartRequest = DeleteCartRequest.builder()
+                .username(user.getUsername())
+                .appId("<app_id>")
+                .build();
+
+        mockMvc.perform(delete("/api/v1/cart/" + deleteCartRequest.getAppId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(handler().methodName("deleteCart"));
 
-        verify(deleteCartLogic, times(1)).processLogic(appId);
+        verify(deleteCartLogic, times(1)).processLogic(deleteCartRequest);
     }
 }

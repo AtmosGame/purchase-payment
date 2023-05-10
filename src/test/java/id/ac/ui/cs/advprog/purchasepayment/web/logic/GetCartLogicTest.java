@@ -18,20 +18,18 @@ class GetCartLogicTest {
     @InjectMocks
     private GetCartLogic getCartLogic;
     @Mock
-    private RequestProcessor<Void> getCartRequestProcessor;
-    @Mock
     private GetCart getCartImpl;
 
-    private Void request;
+    private String request;
 
     @BeforeEach
     void setUp() {
+        request = "<username>";
     }
 
     @Test
-     void testProcessLogic() {
+    void testProcessLogic() {
         getCartLogic.processLogic(request);
-        verify(getCartRequestProcessor, times(1)).validate(request);
         verify(getCartImpl, times(1)).findCartByUsername(any(String.class));
     }
 }
