@@ -1,9 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.web.logic;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.usecase.AddSecretToken;
-import id.ac.ui.cs.advprog.purchasepayment.usecase.UpdateCart;
 import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
