@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PurchasedAppRepository extends CrudRepository<PurchasedApp, Integer> {
     boolean existsPurchasedAppByAppId(String id);
-    boolean existsPurchasedAppByUserId(String id);
+    boolean existsPurchasedAppByUsername(String id);
 }

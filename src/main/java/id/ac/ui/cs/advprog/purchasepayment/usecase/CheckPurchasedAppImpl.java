@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchased;
+package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.UseCase;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;
@@ -13,11 +13,11 @@ public class CheckPurchasedAppImpl implements CheckPurchasedApp {
 
     @Override
     public boolean isPurchased(CheckPurchasedRequest request) {
-        return (existsPurchasedAppByAppId(request.getAppId()) && existsPurchasedAppByUserId(request.getUserId()));
+        return (existsPurchasedAppByAppId(request.getAppId()) && existsPurchasedAppByUsername(request.getUsername()));
     }
 
-    public boolean existsPurchasedAppByUserId(String userId) {
-        return purchasedAppRepository.existsPurchasedAppByUserId(userId);
+    public boolean existsPurchasedAppByUsername(String userId) {
+        return purchasedAppRepository.existsPurchasedAppByUsername(userId);
     }
 
     public boolean existsPurchasedAppByAppId(String appId) {

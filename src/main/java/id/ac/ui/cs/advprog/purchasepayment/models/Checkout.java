@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -21,4 +23,16 @@ public class Checkout {
 
     @Column(nullable = false)
     private String statusPembayaran;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column
+    private LocalDateTime waktuPembuatanCheckout;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="cart_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Cart cart;
+
 }

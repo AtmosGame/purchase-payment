@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckPurchasedRequest {
-    private String userId;
+    private String username;
     private String appId;
 }
