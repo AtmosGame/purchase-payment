@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.web.logic;
 
+import id.ac.ui.cs.advprog.purchasepayment.dto.DeleteCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.usecase.DeleteCart;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +18,14 @@ class DeleteCartLogicTest {
     @Mock
     private DeleteCart deleteCartImpl;
 
-    private String request;
+    private DeleteCartRequest request;
 
     @BeforeEach
     void setUp() {
-        request = "<app_id>";
+        request = DeleteCartRequest.builder()
+                .appId("<app_id>")
+                .username("<username>")
+                .build();
     }
 
     @Test

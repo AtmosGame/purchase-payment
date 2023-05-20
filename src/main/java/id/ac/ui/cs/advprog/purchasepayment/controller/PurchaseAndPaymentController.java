@@ -1,20 +1,15 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
-import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckPurchasedRequest;
-import id.ac.ui.cs.advprog.purchasepayment.usecase.CheckPurchasedApp;
-import id.ac.ui.cs.advprog.purchasepayment.web.logic.CheckPurchasedLogic;
-import id.ac.ui.cs.advprog.purchasepayment.dto.AddSecretTokenRequest;
-import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
-import id.ac.ui.cs.advprog.purchasepayment.dto.CheckoutCartRequest;
+import id.ac.ui.cs.advprog.purchasepayment.dto.*;
+import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
-import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
-import id.ac.ui.cs.advprog.purchasepayment.web.processor.response.ResponseProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,16 +18,20 @@ import org.springframework.web.bind.annotation.*;
 public class PurchaseAndPaymentController {
     private final PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
     private final PurchaseAndPaymentLogic<AddSecretTokenRequest, Void> addSecretTokenLogic;
-    private final PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
+    private final PurchaseAndPaymentLogic<String, GetCartResponse> getCartLogic;
     private final PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
     private final PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
     private final PurchaseAndPaymentLogic<CheckPurchasedRequest, Boolean> checkPurchasedLogic;
-//    private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
-//    private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
-//    private final CheckPurchasedApp checkPurchasedAppImpl;
-    private final PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
+    private final PurchaseAndPaymentLogic<DeleteCartRequest, Void> deleteCartLogic;
+
+    private static User getCurrentUser() {
+        return ((User) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal());
+    }
 
     @GetMapping("/test")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> sayTest() {
         return ResponseEntity.ok("PaymentAndPurchaseController Test");
     }
@@ -54,8 +53,10 @@ public class PurchaseAndPaymentController {
     }
 
     @GetMapping("/cart")
+    @PreAuthorize("hasAuthority('cart:read_self')")
     public ResponseEntity<GetCartResponse> getCart() {
-        GetCartResponse response = getCartLogic.processLogic(null);
+        var user = getCurrentUser();
+        GetCartResponse response = getCartLogic.processLogic(user.getUsername());
         return ResponseEntity.ok(response);
     }
 
@@ -71,10 +72,15 @@ public class PurchaseAndPaymentController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-//    @PreAuthorize("hasRole('ROLE_VIEWER')")
     @DeleteMapping("/cart/{appId}")
+    @PreAuthorize("hasAuthority('cart:delete')")
     public ResponseEntity<Void> deleteCart(@PathVariable String appId) {
-        deleteCartLogic.processLogic(appId);
+        var user = getCurrentUser();
+        DeleteCartRequest request = DeleteCartRequest.builder()
+                .username(user.getUsername())
+                .appId(appId)
+                .build();
+        deleteCartLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
