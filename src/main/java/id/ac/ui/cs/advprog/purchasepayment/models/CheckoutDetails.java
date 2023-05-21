@@ -8,29 +8,29 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "checkout")
-public class Checkout {
+@Table(name = "checkout_details")
+public class CheckoutDetails {
     @Id
     @GeneratedValue
     private Integer id;
-
     @Column(nullable = false)
-    private String statusPembayaran;
+    private String appId;
+    @Column(nullable = false)
+    private String appName;
+    @Column(nullable = false)
+    private Double appPrice;
 
-    @Column(unique = false, nullable = false)
-    private String username;
+    private Date addDate;
 
-    @Column
-    private LocalDateTime waktuPembuatanCheckout;
-
-    @OneToMany(mappedBy = "checkout")
-    private List<CheckoutDetails> checkoutDetails;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="checkout_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Checkout checkout;
 }

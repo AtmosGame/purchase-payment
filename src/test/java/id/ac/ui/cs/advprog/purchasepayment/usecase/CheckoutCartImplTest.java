@@ -43,6 +43,7 @@ class CheckoutCartImplTest {
     private CartDetails cartDetails;
     private CheckoutCartRequest request;
 
+
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -67,19 +68,56 @@ class CheckoutCartImplTest {
                 .appPrice(399399.0)
                 .cart(userCart)
                 .build();
+
     }
 
+
+
 //    @Test
-//    void testCheckout_success() {
+//    void testCheckoutCartWithNonEmptyCart() {
+//        // Create a request with a non-empty cart
+//        List<CartDetails> cartDetails = Arrays.asList(
+//                new CartDetails(1,"1", "app1", 200000., new Date(), userCart),
+//                new CartDetails(2,"2", "app2", 200000., new Date(), userCart)
+//        );
 //        CheckoutCartRequest request = new CheckoutCartRequest(1, "user1");
-//        when(checkoutRepository.save(any())).thenReturn(new Checkout(1, "Menunggu Pembayaran","user1", LocalDateTime.now()));
-//        Checkout checkout = checkoutCartImpl.checkout(request);
-//        assertNotNull(checkout);
-//        assertEquals(request.getUsername(), checkout.getUsername());
+//
+//        // Mock the findCartByUsername method to return a non-empty cart
+//        Mockito.when(cartRepository.findByUsername("user1"))
+//                .thenReturn(Optional.of(new Cart(1, "user1", cartDetails)));
+//
+//        // Mock the deleteCart method using Mockito
+//        DeleteCart deleteCart = Mockito.mock(DeleteCart.class);
+//
+//        // Create an instance of CheckoutServiceImpl with mocked dependencies
+//        CheckoutCartImpl checkoutService = new CheckoutCartImpl(
+//                cartRepository, cartDetailsRepository, checkoutRepository, deleteCart);
+//
+//        // Mock the save method of the checkoutRepository to return a saved checkout object
+//        Checkout savedCheckout = new Checkout(1, "Menunggu Pembayaran", "user1",
+//                LocalDateTime.now(), new Cart(1, "user1", cartDetails));
+//        Mockito.when(checkoutRepository.save(Mockito.any()))
+//                .thenReturn(savedCheckout);
+//
+//        // Call checkout method
+//        Checkout checkout = checkoutService.checkout(request);
+//
+//        // Assert that the checkout was successful and saved to repository
+//        assertNotNull(checkout.getId());
+//        assertEquals("user1", checkout.getUsername());
+//        assertEquals("Menunggu Pembayaran", checkout.getStatusPembayaran());
+//        assertNotNull(checkout.getWaktuPembuatanCheckout());
+//        assertEquals(2, checkout.getCart().getCartDetails().size());
+//        Mockito.verify(checkoutRepository, Mockito.times(1)).save(Mockito.any());
+//
+//        // Assert that the deleteCart method was called for each cart detail
+//        for (CartDetails details : cartDetails) {
+//            Mockito.verify(deleteCart, Mockito.times(1)).deleteCartByAppId("user1", details.getAppId());
+//        }
 //    }
 
     @Test
-    void testCheckout_cartIsEmpty() {
+    void testCheckoutCartWithEmptyCart() {
         CheckoutCartRequest request = new CheckoutCartRequest(2, "user2");
         assertThrows(CartIsEmptyException.class, () -> {checkoutCartImpl.checkout(request);});
     }

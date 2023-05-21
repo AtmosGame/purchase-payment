@@ -25,7 +25,4 @@ public class CheckPurchasedLogic implements PurchaseAndPaymentLogic<CheckPurchas
         checkPurchasedResponseProcessor.process(response);
         return isPurchased;
     }
-    public Boolean getIsPurchased() {
-        return isPurchased;
-    }
 }

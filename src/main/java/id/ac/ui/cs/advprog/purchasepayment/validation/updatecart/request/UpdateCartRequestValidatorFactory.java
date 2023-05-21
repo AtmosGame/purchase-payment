@@ -5,7 +5,7 @@ import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
 
 public interface UpdateCartRequestValidatorFactory {
     Validator<UpdateCartRequest> createUpdateCartRequestDataValidator();
-    Validator<UpdateCartRequest> createAppNotInListValidator();
+    Validator<UpdateCartRequest> createAppNotInPurchasedAppValidator();
     Validator<UpdateCartRequest> createAppNotInCartValidator();
     Validator<UpdateCartRequest> createAppNotInCheckoutValidator();
 }
