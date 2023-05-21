@@ -37,6 +37,7 @@ public class PurchaseAndPaymentController {
     }
 
     @PutMapping("/cart")
+    @PreAuthorize("hasAuthority('cart:update')")
     public ResponseEntity<Void> updateCart(@RequestBody UpdateCartRequest request) {
         updateCartLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.OK);

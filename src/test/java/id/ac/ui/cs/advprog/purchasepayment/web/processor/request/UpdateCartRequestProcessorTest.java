@@ -25,6 +25,8 @@ class UpdateCartRequestProcessorTest {
     private Validator<UpdateCartRequest> updateCartRequestDataValidator;
     @Mock
     private Validator<UpdateCartRequest> AppNotInPurchasedAppValidator;
+    @Mock
+    private Validator<UpdateCartRequest> appNotInCheckoutValidator;
 
     private UpdateCartRequest request;
 

@@ -11,7 +11,7 @@ import static id.ac.ui.cs.advprog.purchasepayment.dto.auth.UserPermission.*;
 public enum UserRole {
     ADMIN(Sets.newHashSet(USER_READ)),
     DEVELOPER(Sets.newHashSet(USER_READ)),
-    USER(Sets.newHashSet(USER_READ, CART_READ_SELF, CART_DELETE));
+    USER(Sets.newHashSet(USER_READ, CART_READ_SELF, CART_DELETE, UPDATE_CART));
 
     private final Set<UserPermission> permissions;
 

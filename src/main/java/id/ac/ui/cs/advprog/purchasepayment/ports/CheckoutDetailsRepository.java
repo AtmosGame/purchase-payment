@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CheckoutDetailsRepository extends CrudRepository<CheckoutDetails, Integer> {
-
+    boolean existsByCheckoutUsernameAndAppId(String username, String appId);
 }
