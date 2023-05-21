@@ -3,17 +3,23 @@ package id.ac.ui.cs.advprog.purchasepayment.exceptions.advice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.purchasepayment.controller.PurchaseAndPaymentController;
 import id.ac.ui.cs.advprog.purchasepayment.dto.*;
+import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppNotInCartException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartDoesNotExistException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.ErrorTemplate;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.SecretTokenInvalidException;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.JwtService;
 import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
@@ -28,6 +34,7 @@ import java.time.temporal.ChronoUnit;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PurchaseAndPaymentController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class GlobalExceptionHandlerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -36,10 +43,15 @@ class GlobalExceptionHandlerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
+    private JwtService jwtService;
+    @Mock
+    User user;
+
+    @MockBean
     private PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
 
     @MockBean
-    private PurchaseAndPaymentLogic<Void, GetCartResponse> getCartLogic;
+    private PurchaseAndPaymentLogic<String, GetCartResponse> getCartLogic;
 
     @MockBean
     private PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
@@ -54,7 +66,7 @@ class GlobalExceptionHandlerTest {
     private PurchaseAndPaymentLogic<CheckPurchasedRequest, Boolean> checkPurchasedLogic;
 
     @MockBean
-    private PurchaseAndPaymentLogic<String, Void> deleteCartLogic;
+    private PurchaseAndPaymentLogic<DeleteCartRequest, Void> deleteCartLogic;
 
     @InjectMocks
     private GlobalExceptionHandler globalExceptionHandler;

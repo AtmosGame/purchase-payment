@@ -58,14 +58,14 @@ class SecretTokenValidatorTest {
     }
 
     @Test
-    void testAppNotIsFalse() {
+    void testSecretTokenValidIsFalse() {
         doReturn(true).when(secretTokenRepository).existsByTokenName(request.getToken());
         secretTokenValidator.secretTokenValid(request);
         verify(secretTokenRepository, times(1)).existsByTokenName(request.getToken());
     }
 
     @Test
-    void testAppNotIsTrue() {
+    void testSecretTokenValidIsTrue() {
         doReturn(false).when(secretTokenRepository).existsByTokenName(request.getToken());
         secretTokenValidator.secretTokenValid(request);
         verify(secretTokenRepository, times(1)).existsByTokenName(request.getToken());
