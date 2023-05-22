@@ -65,6 +65,14 @@ class UpdatePaymentRequestDataValidatorTest {
     }
 
     @Test
+    void testCheckoutDataIsValidIsFalseWhenThrowError() {
+        doThrow(NumberFormatException.class).when(checkoutRepository).existsById(Integer.valueOf(request.getId()));
+        var result = updatePaymentRequestDataValidator.checkoutDataIsValid(request);
+        verify(checkoutRepository, times(1)).existsById(Integer.valueOf(request.getId()));
+        Assertions.assertThat(result).isFalse();
+    }
+
+    @Test
     void testCheckoutDataIsValidIsTrue() {
         doReturn(false).when(checkoutRepository).existsById(Integer.valueOf(request.getId()));
         updatePaymentRequestDataValidator.checkoutDataIsValid(request);
