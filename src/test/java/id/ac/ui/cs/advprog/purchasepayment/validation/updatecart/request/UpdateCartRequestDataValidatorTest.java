@@ -104,4 +104,13 @@ class UpdateCartRequestDataValidatorTest {
                 .isInstanceOf(RequestDataInvalidException.class)
                 .hasMessage("Request data is not valid");
     }
+
+    @Test
+    void testRequestDataValid() {
+        Mono mock = Mockito.mock(Mono.class);
+        doReturn(mock).when(updateCartRequestDataValidator).checkAppDataAsync(request);
+
+        updateCartRequestDataValidator.requestDataValid(request);
+        verify(mock, times(1)).block();
+    }
 }
