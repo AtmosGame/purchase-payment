@@ -1,6 +1,4 @@
 package id.ac.ui.cs.advprog.purchasepayment.exceptions;
-
-import org.springframework.http.HttpStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
