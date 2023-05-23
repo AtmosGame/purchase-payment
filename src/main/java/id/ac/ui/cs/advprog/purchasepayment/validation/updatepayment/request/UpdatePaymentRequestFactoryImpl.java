@@ -11,6 +11,6 @@ public class UpdatePaymentRequestFactoryImpl implements UpdatePaymentRequestFact
 
     @Override
     public Validator<UpdatePaymentRequest> createCheckoutNotExpiredValidator() {
-        return new CheckoutNotExpiredValidator();
+        return new CheckoutIsActiveValidator();
     }
 }

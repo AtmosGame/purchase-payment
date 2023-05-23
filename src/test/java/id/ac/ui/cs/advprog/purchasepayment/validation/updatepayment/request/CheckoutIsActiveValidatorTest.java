@@ -1,7 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.validation.updatepayment.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.CheckoutIsExpiredException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.CheckoutIsActiveException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Checkout;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutRepository;
 import org.assertj.core.api.Assertions;
@@ -21,10 +21,10 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class CheckoutNotExpiredValidatorTest {
+class CheckoutIsActiveValidatorTest {
     @Spy
     @InjectMocks
-    private CheckoutNotExpiredValidator checkoutNotExpiredValidator;
+    private CheckoutIsActiveValidator checkoutIsActiveValidator;
     @Mock
     private CheckoutRepository checkoutRepository;
     private UpdatePaymentRequest request;
@@ -39,31 +39,31 @@ class CheckoutNotExpiredValidatorTest {
 
     @Test
     void testIsValidReturnTrueWithNextValidatorNull() {
-        doReturn(true).when(checkoutNotExpiredValidator).checkoutNotExpired(request);
-        Assertions.assertThat(checkoutNotExpiredValidator.isValid(request)).isTrue();
+        doReturn(true).when(checkoutIsActiveValidator).checkoutIsActive(request);
+        Assertions.assertThat(checkoutIsActiveValidator.isValid(request)).isTrue();
     }
 
     @Test
     void testIsValidReturnTrueWithNextValidatorNotNull() {
-        CheckoutNotExpiredValidator nextValidator = Mockito.spy(CheckoutNotExpiredValidator.class);
-        checkoutNotExpiredValidator.setNextValidator(nextValidator);
+        CheckoutIsActiveValidator nextValidator = Mockito.spy(CheckoutIsActiveValidator.class);
+        checkoutIsActiveValidator.setNextValidator(nextValidator);
 
-        doReturn(true).when(checkoutNotExpiredValidator).checkoutNotExpired(request);
-        doReturn(true).when(nextValidator).checkoutNotExpired(request);
+        doReturn(true).when(checkoutIsActiveValidator).checkoutIsActive(request);
+        doReturn(true).when(nextValidator).checkoutIsActive(request);
 
-        Assertions.assertThat(checkoutNotExpiredValidator.isValid(request)).isTrue();
+        Assertions.assertThat(checkoutIsActiveValidator.isValid(request)).isTrue();
     }
 
     @Test
     void testIsValidThrowError() {
-        doReturn(false).when(checkoutNotExpiredValidator).checkoutNotExpired(request);
-        Assertions.assertThatThrownBy(() -> checkoutNotExpiredValidator.isValid(request))
-                .isInstanceOf(CheckoutIsExpiredException.class)
-                .hasMessage(String.format("Checkout with %s already expired", request.getId()));
+        doReturn(false).when(checkoutIsActiveValidator).checkoutIsActive(request);
+        Assertions.assertThatThrownBy(() -> checkoutIsActiveValidator.isValid(request))
+                .isInstanceOf(CheckoutIsActiveException.class)
+                .hasMessage(String.format("Checkout with %s not in active/waiting state", request.getId()));
     }
 
     @Test
-    void testCheckoutNotExpiredIsFalse() {
+    void testCheckoutIsActiveIsFalse() {
         Checkout checkoutExpired = Checkout.builder()
                 .statusPembayaran("Expired")
                 .build();
@@ -71,20 +71,20 @@ class CheckoutNotExpiredValidatorTest {
         doReturn(checkoutExpiredOptional).when(checkoutRepository).findById(anyInt());
 
         request.setId("1");
-        var result = checkoutNotExpiredValidator.checkoutNotExpired(request);
+        var result = checkoutIsActiveValidator.checkoutIsActive(request);
         Assertions.assertThat(result).isFalse();
     }
 
     @Test
-    void testCheckoutNotExpiredIsTrue() {
+    void testCheckoutIsActiveIsTrue() {
         Checkout checkoutExpired = Checkout.builder()
-                .statusPembayaran("Success")
+                .statusPembayaran("Menunggu Pembayaran")
                 .build();
         Optional<Checkout> checkoutExpiredOptional = Optional.of(checkoutExpired);
         doReturn(checkoutExpiredOptional).when(checkoutRepository).findById(anyInt());
 
         request.setId("1");
-        var result = checkoutNotExpiredValidator.checkoutNotExpired(request);
+        var result = checkoutIsActiveValidator.checkoutIsActive(request);
         Assertions.assertThat(result).isTrue();
     }
 }
