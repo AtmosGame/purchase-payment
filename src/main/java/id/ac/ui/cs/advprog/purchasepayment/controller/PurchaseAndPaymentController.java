@@ -43,11 +43,13 @@ public class PurchaseAndPaymentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("/check-purchased")
+    @PreAuthorize("hasAuthority('purchased_app:check_purchased_app')")
     public ResponseEntity<Boolean> checkPurchased(@RequestBody CheckPurchasedRequest request) {
         Boolean isPurchased = checkPurchasedLogic.processLogic(request);
-        return new ResponseEntity<>(isPurchased,HttpStatus.CREATED);
+        return new ResponseEntity<>(isPurchased,HttpStatus.OK);
     }
     @PostMapping("/add-token")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> addToken(@RequestBody AddSecretTokenRequest request) {
         addSecretTokenLogic.processLogic(request);
         return new ResponseEntity<>(HttpStatus.CREATED);

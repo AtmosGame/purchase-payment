@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.purchasepayment.config;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
 import id.ac.ui.cs.advprog.purchasepayment.dto.auth.UserResponse;
+import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,28 +14,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.reactive.function.client.WebClient;
+
+import java.io.IOException;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    WebClient webClient = WebClient.create("http://localhost:8081");
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            var userResponse = webClient.get()
-                    .uri("/v1/user/get-user/{username}", username)
-                    .retrieve()
-                    .bodyToMono(UserResponse.class)
-                    .block();
+            var userResponse = jwtAuthenticationFilter.getUser();
             if (userResponse == null) {
                 throw new UsernameNotFoundException("User not found");
             }
-            return User.fromUserResponse(userResponse);
+            return User.fromUserResponse((UserResponse) userResponse);
         };
     }
-
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
