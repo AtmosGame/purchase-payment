@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.config;
 
+import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
+import id.ac.ui.cs.advprog.purchasepayment.dto.auth.UserResponse;
 import id.ac.ui.cs.advprog.purchasepayment.usecase.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,10 +11,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 
@@ -21,9 +25,11 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
     private static final String JWT_HEADER = "Authorization";
     private static final String JWT_TOKEN_PREFIX = "Bearer";
+    private static UserDetails userDetails;
+    WebClient webClient = WebClient.create("http://35.240.241.173");
+
 
     @Override
     protected void doFilterInternal(
@@ -44,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         username = jwtService.extractUsername(jwtToken);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var userDetails = this.userDetailsService.loadUserByUsername(username);
+            userDetails = getUserDetails(username, jwtToken);
 
             if (jwtService.isTokenValid(jwtToken, userDetails)) {
                 var authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -57,6 +63,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+
+    protected UserDetails getUserDetails (String username, String jwtToken) {
+        var userResponse = webClient.get()
+                .uri("/v1/user/get-user/{username}", username)
+                .header("Authorization", "Bearer " + jwtToken)
+                .retrieve()
+                .bodyToMono(UserResponse.class)
+                .block();
+        if (userResponse == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return User.fromUserResponse(userResponse);
+    }
+
+    protected UserDetails getUser(){
+        return userDetails;
     }
 }
 

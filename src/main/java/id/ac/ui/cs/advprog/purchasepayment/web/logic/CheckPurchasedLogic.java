@@ -14,7 +14,7 @@ public class CheckPurchasedLogic implements PurchaseAndPaymentLogic<CheckPurchas
     private final RequestProcessor<CheckPurchasedRequest> checkPurchasedRequestProcessor;
     private final ResponseProcessor<CheckPurchasedResponse, Boolean> checkPurchasedResponseProcessor;
     private final CheckPurchasedApp checkPurchasedAppImpl;
-    public Boolean isPurchased;
+    private Boolean isPurchased;
 
 
     @Override
