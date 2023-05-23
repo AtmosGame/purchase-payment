@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.exceptions.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ac.ui.cs.advprog.purchasepayment.config.URLProperties;
 import id.ac.ui.cs.advprog.purchasepayment.controller.PurchaseAndPaymentController;
 import id.ac.ui.cs.advprog.purchasepayment.dto.*;
 import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
@@ -44,6 +45,8 @@ class GlobalExceptionHandlerTest {
 
     @MockBean
     private JwtService jwtService;
+    @MockBean
+    private URLProperties urlProperties;
     @Mock
     User user;
 
