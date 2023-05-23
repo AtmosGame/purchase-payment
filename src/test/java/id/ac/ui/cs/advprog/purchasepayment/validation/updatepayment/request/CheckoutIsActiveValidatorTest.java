@@ -1,7 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.validation.updatepayment.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.CheckoutIsActiveException;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.CheckoutIsNotActiveException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Checkout;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutRepository;
 import org.assertj.core.api.Assertions;
@@ -18,7 +18,6 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CheckoutIsActiveValidatorTest {
@@ -58,7 +57,7 @@ class CheckoutIsActiveValidatorTest {
     void testIsValidThrowError() {
         doReturn(false).when(checkoutIsActiveValidator).checkoutIsActive(request);
         Assertions.assertThatThrownBy(() -> checkoutIsActiveValidator.isValid(request))
-                .isInstanceOf(CheckoutIsActiveException.class)
+                .isInstanceOf(CheckoutIsNotActiveException.class)
                 .hasMessage(String.format("Checkout with %s not in active/waiting state", request.getId()));
     }
 
@@ -69,6 +68,14 @@ class CheckoutIsActiveValidatorTest {
                 .build();
         Optional<Checkout> checkoutExpiredOptional = Optional.of(checkoutExpired);
         doReturn(checkoutExpiredOptional).when(checkoutRepository).findById(anyInt());
+
+        request.setId("1");
+        var result = checkoutIsActiveValidator.checkoutIsActive(request);
+        Assertions.assertThat(result).isFalse();
+    }
+    @Test
+    void testCheckoutIsActiveIsFalseAndOptionalIsEmpty() {
+        doReturn(Optional.empty()).when(checkoutRepository).findById(anyInt());
 
         request.setId("1");
         var result = checkoutIsActiveValidator.checkoutIsActive(request);

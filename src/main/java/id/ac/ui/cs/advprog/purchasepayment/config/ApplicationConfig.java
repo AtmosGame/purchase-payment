@@ -25,6 +25,7 @@ public class ApplicationConfig {
         return username -> {
             var userResponse = webClient.get()
                     .uri("/v1/user/get-user/{username}", username)
+                    .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdG1vczEiLCJpYXQiOjE2ODQ4MjkyNjksImV4cCI6MTY4NDgzMDcwOX0.uPlgllBx0rSKlyPYj2qcuuLYcxfoTIHoiug65OR0-Lk")
                     .retrieve()
                     .bodyToMono(UserResponse.class)
                     .block();

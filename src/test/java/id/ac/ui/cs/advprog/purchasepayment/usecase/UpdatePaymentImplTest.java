@@ -63,7 +63,7 @@ class UpdatePaymentImplTest {
         doReturn(checkoutExpiredOptional).when(checkoutRepository).findById(anyInt());
 
         updatePayment.updateCheckoutStatus(checkoutExpired.getId());
-        Assertions.assertThat(checkoutExpired.getStatusPembayaran().equals("Success")).isTrue();
+        Assertions.assertThat(checkoutExpired.getStatusPembayaran()).isEqualTo("Success");
     }
 
     @Test

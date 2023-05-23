@@ -27,8 +27,7 @@ public class UpdatePaymentRequestDataValidator extends Validator<UpdatePaymentRe
 
     public boolean checkoutDataIsValid(UpdatePaymentRequest request) {
         try {
-            var result = checkoutRepository.existsById(Integer.valueOf(request.getId()));
-            return result;
+            return checkoutRepository.existsById(Integer.valueOf(request.getId()));
         } catch (Exception e) {
             return false;
         }
