@@ -25,12 +25,12 @@ public class Checkout {
     @Column(nullable = false)
     private String statusPembayaran;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = false, nullable = false)
     private String username;
 
     @Column
     private LocalDateTime waktuPembuatanCheckout;
 
-    @OneToMany(mappedBy = "checkout", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "checkout")
     private List<CheckoutDetails> checkoutDetails;
 }

@@ -35,6 +35,6 @@ class UpdatePaymentLogicTest {
     void testProcessLogic() {
         updatePaymentLogic.processLogic(request);
         verify(updatePaymentRequestProcessor, times(1)).validate(request);
-        verify(updatePaymentImpl, times(1)).update(request.getId());
+        verify(updatePaymentImpl, times(1)).update(request);
     }
 }

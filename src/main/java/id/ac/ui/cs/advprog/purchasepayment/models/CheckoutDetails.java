@@ -16,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "checkout_details")
-public class CheckoutDetails {
+public class    CheckoutDetails {
     @Id
     @GeneratedValue
     private Integer id;

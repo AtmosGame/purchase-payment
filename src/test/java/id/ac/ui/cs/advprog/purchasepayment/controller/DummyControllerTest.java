@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.purchasepayment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ac.ui.cs.advprog.purchasepayment.config.URLProperties;
 import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
 import id.ac.ui.cs.advprog.purchasepayment.usecase.JwtService;
 import org.assertj.core.api.Assertions;
@@ -33,6 +34,8 @@ class DummyControllerTest {
 
     @MockBean
     private JwtService jwtService;
+    @MockBean
+    private URLProperties urlProperties;
 
     @Mock
     User user;
