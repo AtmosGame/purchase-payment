@@ -20,7 +20,8 @@ public class GlobalExceptionHandler {
             AppAlreadyInCheckoutException.class,
             CheckoutIsExpiredException.class,
             AppIsNotAvailableException.class,
-            UsernameIsNotAvailableException.class
+            UsernameIsNotAvailableException.class,
+            EmptySecretTokenException.class
     })
     public ResponseEntity<Object> notAvailable(Exception exception) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
@@ -43,4 +44,5 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(498).body(baseException);
     }
+
 }
