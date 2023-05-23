@@ -22,7 +22,6 @@ import java.io.IOException;
 public class ApplicationConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-//    private final UserDetailsService userDetailsService;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -36,7 +35,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() throws ServletException, IOException {
+    public AuthenticationProvider authenticationProvider() {
         var authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
