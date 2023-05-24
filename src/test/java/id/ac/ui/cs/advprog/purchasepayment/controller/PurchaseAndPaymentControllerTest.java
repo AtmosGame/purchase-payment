@@ -173,14 +173,12 @@ class PurchaseAndPaymentControllerTest {
                 .username("username")
                 .build();
 
-        // when
         mockMvc.perform(post("/api/v1/check-purchased")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn();
 
-        // then
         verify(checkPurchasedLogic, times(1)).processLogic(request);
     }
 
