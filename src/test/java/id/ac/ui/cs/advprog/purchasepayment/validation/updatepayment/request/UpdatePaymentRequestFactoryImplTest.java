@@ -24,6 +24,6 @@ class UpdatePaymentRequestFactoryImplTest {
     @Test
     void testCreateCheckoutNotExpiredValidator() {
         Validator<UpdatePaymentRequest> appNotInListValidator = factory.createCheckoutNotExpiredValidator();
-        Assertions.assertThat(appNotInListValidator).isInstanceOf(CheckoutNotExpiredValidator.class);
+        Assertions.assertThat(appNotInListValidator).isInstanceOf(CheckoutIsActiveValidator.class);
     }
 }
