@@ -15,10 +15,10 @@ public class GlobalExceptionHandler {
             CartDoesNotExistException.class,
             AppNotInCartException.class,
             RequestDataInvalidException.class,
-            AppAlreadyInListException.class,
+            AppAlreadyInPurchasedAppException.class,
             AppAlreadyInCartException.class,
             AppAlreadyInCheckoutException.class,
-            CheckoutIsExpiredException.class,
+            CheckoutIsNotActiveException.class,
             AppIsNotAvailableException.class,
             UsernameIsNotAvailableException.class,
             EmptySecretTokenException.class
@@ -44,5 +44,4 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(498).body(baseException);
     }
-
 }

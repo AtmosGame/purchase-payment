@@ -62,14 +62,14 @@ class AppNotInCartValidatorTest {
     }
 
     @Test
-    void testAppNotIsFalse() {
+    void testAppNotInCartIsFalse() {
         doReturn(true).when(cartDetailsRepository).existsByCartUsernameAndAppId(request.getUsername(), request.getId());
         appNotInCartValidator.appNotInCart(request);
         verify(cartDetailsRepository, times(1)).existsByCartUsernameAndAppId(request.getUsername(), request.getId());
     }
 
     @Test
-    void testAppNotIsTrue() {
+    void testAppNotInCartIsTrue() {
         doReturn(false).when(cartDetailsRepository).existsByCartUsernameAndAppId(request.getUsername(), request.getId());
         appNotInCartValidator.appNotInCart(request);
         verify(cartDetailsRepository, times(1)).existsByCartUsernameAndAppId(request.getUsername(), request.getId());

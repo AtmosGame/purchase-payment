@@ -1,26 +1,75 @@
 package id.ac.ui.cs.advprog.purchasepayment.exceptions.advice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import id.ac.ui.cs.advprog.purchasepayment.config.URLProperties;
+import id.ac.ui.cs.advprog.purchasepayment.controller.PurchaseAndPaymentController;
+import id.ac.ui.cs.advprog.purchasepayment.dto.*;
+import id.ac.ui.cs.advprog.purchasepayment.dto.auth.User;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppNotInCartException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartDoesNotExistException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.ErrorTemplate;
+import id.ac.ui.cs.advprog.purchasepayment.exceptions.SecretTokenInvalidException;
+import id.ac.ui.cs.advprog.purchasepayment.usecase.JwtService;
+import id.ac.ui.cs.advprog.purchasepayment.web.logic.PurchaseAndPaymentLogic;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
-import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(controllers = PurchaseAndPaymentController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class GlobalExceptionHandlerTest {
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @MockBean
+    private JwtService jwtService;
+    @MockBean
+    private URLProperties urlProperties;
+    @Mock
+    User user;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<UpdateCartRequest, Void> updateCartLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<String, GetCartResponse> getCartLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<UpdatePaymentRequest, Void> updatePaymentLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<AddSecretTokenRequest, Void> addSecretTokenLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<CheckoutCartRequest, Void> checkoutCartLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<CheckPurchasedRequest, Boolean> checkPurchasedLogic;
+
+    @MockBean
+    private PurchaseAndPaymentLogic<DeleteCartRequest, Void> deleteCartLogic;
 
     @InjectMocks
     private GlobalExceptionHandler globalExceptionHandler;
@@ -67,5 +116,21 @@ class GlobalExceptionHandlerTest {
 
         // test
         TestNotAvailableException(exception, expectedErrorMessage);
+    }
+
+    @Test
+    void testSecretTokenInvalid() throws Exception {
+        UpdatePaymentRequest updatePaymentRequest = UpdatePaymentRequest.builder()
+                .id("<checkout_id>")
+                .token("<secret_token>")
+                .build();
+
+        Mockito.when(updatePaymentLogic.processLogic(updatePaymentRequest))
+                .thenThrow(SecretTokenInvalidException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/payment")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(updatePaymentRequest)))
+                .andExpect(status().is(498));
     }
 }

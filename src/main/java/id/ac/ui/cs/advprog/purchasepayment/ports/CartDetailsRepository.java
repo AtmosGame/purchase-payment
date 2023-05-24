@@ -14,7 +14,7 @@ public interface CartDetailsRepository extends CrudRepository<CartDetails, Integ
 
     boolean existsByCartUsernameAndAppId(String username, String appId);
     @Transactional
-    void deleteByCartId(Integer cartId);
+    void deleteByCartUsername(String username);
     @Transactional
     Integer deleteCartDetailsByCartUsernameAndAppId(String username, String appId);
 }

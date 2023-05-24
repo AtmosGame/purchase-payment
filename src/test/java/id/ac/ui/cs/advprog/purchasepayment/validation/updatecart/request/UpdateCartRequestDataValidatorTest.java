@@ -94,18 +94,6 @@ class UpdateCartRequestDataValidatorTest {
     }
 
     @Test
-    void checkUsernameAsyncIsOK() {
-        when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
-        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
-        when(responseSpec.toEntity(String.class)).thenReturn(Mono.just(Mockito.mock(ResponseEntity.class)));
-
-        Mono<ResponseEntity<String >> mono = updateCartRequestDataValidator.checkUsernameAsync(request);
-        Assertions.assertThat(mono).isNotNull();
-    }
-
-    @Test
     void checkUsernameAsyncThrowError() {
         when(webClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
@@ -115,15 +103,5 @@ class UpdateCartRequestDataValidatorTest {
         Assertions.assertThatThrownBy(() -> updateCartRequestDataValidator.checkAppDataAsync(request))
                 .isInstanceOf(RequestDataInvalidException.class)
                 .hasMessage("Request data is not valid");
-    }
-
-    @Test
-    void testRequestDataValid() {
-        doReturn(Mono.just(Mockito.mock(ResponseEntity.class)))
-                .when(updateCartRequestDataValidator).checkAppDataAsync(request);
-        doReturn(Mono.just(Mockito.mock(ResponseEntity.class)))
-                .when(updateCartRequestDataValidator).checkUsernameAsync(request);
-        boolean result = updateCartRequestDataValidator.requestDataValid(request);
-        Assertions.assertThat(result).isTrue();
     }
 }

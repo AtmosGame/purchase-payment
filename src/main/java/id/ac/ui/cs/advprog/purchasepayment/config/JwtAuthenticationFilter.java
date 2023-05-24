@@ -25,11 +25,10 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final URLProperties urlProperties;
     private static final String JWT_HEADER = "Authorization";
     private static final String JWT_TOKEN_PREFIX = "Bearer";
-    private static UserDetails userDetails;
-    WebClient webClient = WebClient.create("http://35.240.241.173");
-
+    private UserDetails userDetails;
 
     @Override
     protected void doFilterInternal(
@@ -67,9 +66,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
     protected UserDetails getUserDetails (String username, String jwtToken) {
+        WebClient webClient = WebClient.create(urlProperties.getAuthAdminURL());
         var userResponse = webClient.get()
                 .uri("/v1/user/get-user/{username}", username)
-                .header("Authorization", "Bearer " + jwtToken)
+                .header(JWT_HEADER, JWT_TOKEN_PREFIX + " " + jwtToken)
                 .retrieve()
                 .bodyToMono(UserResponse.class)
                 .block();

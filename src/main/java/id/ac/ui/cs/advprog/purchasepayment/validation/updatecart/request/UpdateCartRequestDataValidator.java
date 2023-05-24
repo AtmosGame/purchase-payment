@@ -25,25 +25,13 @@ public class UpdateCartRequestDataValidator extends Validator<UpdateCartRequest>
 
     public boolean requestDataValid(UpdateCartRequest request) {
         Mono<ResponseEntity<String>> chekAppDataMono = checkAppDataAsync(request);
-        Mono<ResponseEntity<String>> checkUsernameMono = checkUsernameAsync(request);
-        Mono.zip(chekAppDataMono, checkUsernameMono).block();
+        chekAppDataMono.block();
         return true;
     }
 
     public Mono<ResponseEntity<String>> checkAppDataAsync(UpdateCartRequest request) {
         return webClient.get()
-                .uri("/api/v1/test")
-                .retrieve()
-                .onStatus(
-                        status -> status.value() != 200,
-                        error -> Mono.error(new RequestDataInvalidException())
-                )
-                .toEntity(String.class);
-    }
-
-    public Mono<ResponseEntity<String>> checkUsernameAsync(UpdateCartRequest request) {
-        return webClient.get()
-                .uri("/api/v1/test")
+                .uri("/api/v1/dummy/hello")
                 .retrieve()
                 .onStatus(
                         status -> status.value() != 200,
