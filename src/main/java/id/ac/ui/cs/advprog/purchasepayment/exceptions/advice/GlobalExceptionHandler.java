@@ -21,8 +21,6 @@ public class GlobalExceptionHandler {
             CheckoutIsExpiredException.class,
             AppIsNotAvailableException.class,
             UsernameIsNotAvailableException.class,
-            CheckoutIsExpiredException.class
-            UsernameIsNotAvailableException.class,
             EmptySecretTokenException.class
     })
     public ResponseEntity<Object> notAvailable(Exception exception) {
