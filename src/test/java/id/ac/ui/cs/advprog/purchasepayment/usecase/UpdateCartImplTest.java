@@ -30,6 +30,8 @@ class UpdateCartImplTest {
     private CartRepository cartRepository;
     @Mock
     private CartDetailsRepository cartDetailsRepository;
+    @Mock
+    private GetCart getCart;
 
     private UpdateCartRequest request;
 
@@ -62,7 +64,7 @@ class UpdateCartImplTest {
 
     @Test
     void testUpdate() {
-        doReturn(userCart).when(updateCartImpl).getCartByUsername(request.getUsername());
+        doReturn(userCart).when(getCart).getCartByUsername(request.getUsername());
         Cart result = updateCartImpl.update(request);
         Assertions.assertThat(userCart).isEqualTo(result);
 

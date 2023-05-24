@@ -16,10 +16,11 @@ import java.util.Optional;
 public class UpdateCartImpl implements UpdateCart {
     private final CartRepository cartRepository;
     private final CartDetailsRepository cartDetailsRepository;
+    private final GetCart getCart;
 
     @Override
     public Cart update(UpdateCartRequest request) {
-        var userCart = getCartByUsername(request.getUsername());
+        var userCart = getCart.getCartByUsername(request.getUsername());
         addCartDetailsToCartByRequest(request, userCart);
         return userCart;
     }

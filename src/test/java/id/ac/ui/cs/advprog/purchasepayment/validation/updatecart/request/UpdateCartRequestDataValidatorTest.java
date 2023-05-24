@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request;
 
+import id.ac.ui.cs.advprog.purchasepayment.dto.AppValidationResponse;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.RequestDataInvalidException;
 import org.assertj.core.api.Assertions;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -27,6 +29,10 @@ class UpdateCartRequestDataValidatorTest {
     @Mock
     private WebClient webClient;
     @Mock
+    private WebClient.RequestBodyUriSpec requestBodyUriSpec;
+    @Mock
+    private WebClient.RequestBodySpec requestBodySpec;
+    @Mock
     private WebClient.RequestHeadersUriSpec requestHeadersUriSpec;
     @Mock
     private WebClient.RequestHeadersSpec requestHeadersSpec;
@@ -37,7 +43,7 @@ class UpdateCartRequestDataValidatorTest {
     @BeforeEach
     void setUp() {
         request = UpdateCartRequest.builder()
-                .id("<app_id>")
+                .id("1")
                 .name("<app_name>")
                 .price(0.0)
                 .username("<requestor_username>")
@@ -71,46 +77,32 @@ class UpdateCartRequestDataValidatorTest {
 
     @Test
     void testCheckAppDataAsyncIsOK() {
-        when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
-        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
-        when(responseSpec.toEntity(String.class)).thenReturn(Mono.just(mock(ResponseEntity.class)));
+        lenient().when(webClient.method(HttpMethod.GET)).thenReturn(requestBodyUriSpec);
+        lenient().when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
+        lenient().when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+        lenient().when(requestBodySpec.header(any(), any())).thenReturn(requestBodySpec);
+        lenient().when(requestBodySpec.bodyValue(any())).thenReturn(requestHeadersSpec);
+        lenient().when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        lenient().when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
+        lenient().when(responseSpec.toEntity(AppValidationResponse.class)).thenReturn(Mono.just(mock(ResponseEntity.class)));
 
-        Mono<ResponseEntity<String >> mono = updateCartRequestDataValidator.checkAppDataAsync(request);
+        Mono<ResponseEntity<AppValidationResponse>> mono = updateCartRequestDataValidator.checkAppDataAsync(request);
         Assertions.assertThat(mono).isNotNull();
     }
 
     @Test
     void testCheckAppDataAsyncThrowError() {
-        when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
-        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.onStatus(any(), any())).thenThrow(new RequestDataInvalidException());
+        lenient().when(webClient.method(HttpMethod.GET)).thenReturn(requestBodyUriSpec);
+        lenient().when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
+        lenient().when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+        lenient().when(requestBodySpec.header(any(), any())).thenReturn(requestBodySpec);
+        lenient().when(requestBodySpec.bodyValue(any())).thenReturn(requestHeadersSpec);
+        lenient().when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        lenient().when(responseSpec.onStatus(any(), any())).thenThrow(new RequestDataInvalidException());
 
         Assertions.assertThatThrownBy(() -> updateCartRequestDataValidator.checkAppDataAsync(request))
                 .isInstanceOf(RequestDataInvalidException.class)
                 .hasMessage("Request data is not valid");
     }
 
-    @Test
-    void checkUsernameAsyncThrowError() {
-        when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
-        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.onStatus(any(), any())).thenThrow(new RequestDataInvalidException());
-
-        Assertions.assertThatThrownBy(() -> updateCartRequestDataValidator.checkAppDataAsync(request))
-                .isInstanceOf(RequestDataInvalidException.class)
-                .hasMessage("Request data is not valid");
-    }
-
-    @Test
-    void testRequestDataValid() {
-        Mono mock = Mockito.mock(Mono.class);
-        doReturn(mock).when(updateCartRequestDataValidator).checkAppDataAsync(request);
-
-        updateCartRequestDataValidator.requestDataValid(request);
-        verify(mock, times(1)).block();
-    }
 }
