@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.UseCase;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
+import id.ac.ui.cs.advprog.purchasepayment.models.Checkout;
 import id.ac.ui.cs.advprog.purchasepayment.models.CheckoutDetails;
 import id.ac.ui.cs.advprog.purchasepayment.models.PurchasedApp;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutDetailsRepository;
@@ -28,15 +29,25 @@ public class UpdatePaymentImpl implements UpdatePayment {
 
     @Override
     public void updateCheckoutStatus(Integer checkoutId) {
-        var checkout = checkoutRepository.findById(checkoutId).get();
+        var checkout = getCheckoutById(checkoutId);
+
+        if (checkout == null) {
+            return;
+        }
+
         checkout.setStatusPembayaran("Success");
         checkoutRepository.save(checkout);
     }
 
+
     @Override
     public void updateUserPurchasedApps(Integer checkoutId) {
-        var checkout = checkoutRepository.findById(checkoutId).get();
+        var checkout = getCheckoutById(checkoutId);
         List<CheckoutDetails> checkoutDetails = checkoutDetailsRepository.findAllByCheckoutId(checkoutId);
+
+        if (checkout == null) {
+            return;
+        }
 
         checkoutDetails.forEach(detail -> {
             var purchasedApp = PurchasedApp.builder()
@@ -48,5 +59,10 @@ public class UpdatePaymentImpl implements UpdatePayment {
                     .build();
             purchasedAppRepository.save(purchasedApp);
         });
+    }
+
+    private Checkout getCheckoutById(Integer checkoutId) {
+        var optionalCheckout = checkoutRepository.findById(checkoutId);
+        return optionalCheckout.orElse(null);
     }
 }

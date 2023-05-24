@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.validation.updatepayment.request;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdatePaymentRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.CheckoutIsExpiredException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.RequestDataInvalidException;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutRepository;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
@@ -28,8 +27,7 @@ public class UpdatePaymentRequestDataValidator extends Validator<UpdatePaymentRe
 
     public boolean checkoutDataIsValid(UpdatePaymentRequest request) {
         try {
-            var result = checkoutRepository.existsById(Integer.valueOf(request.getId()));
-            return result;
+            return checkoutRepository.existsById(Integer.valueOf(request.getId()));
         } catch (Exception e) {
             return false;
         }

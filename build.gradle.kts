@@ -9,8 +9,8 @@ plugins {
 
 sonarqube {
     properties {
-        property ("sonar.projectKey", "atmos-purchase-payment")
-        property ("sonar.organization", "atmos-purchase-payment")
+        property("sonar.projectKey", "atmos-purchase-payment")
+        property("sonar.organization", "atmos-purchase-payment")
     }
 }
 
@@ -45,6 +45,8 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.google.guava:guava:31.1-jre")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus")
 }
 
 tasks.withType<Test> {

@@ -3,8 +3,6 @@ package id.ac.ui.cs.advprog.purchasepayment.web.processor.request;
 import id.ac.ui.cs.advprog.purchasepayment.annotations.Processor;
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.validation.Validator;
-import id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request.UpdateCartRequestValidatorFactory;
-import id.ac.ui.cs.advprog.purchasepayment.validation.updatecart.request.UpdateCartRequestValidatorFactoryImpl;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
             AppAlreadyInPurchasedAppException.class,
             AppAlreadyInCartException.class,
             AppAlreadyInCheckoutException.class,
-            CheckoutIsExpiredException.class,
+            CheckoutIsNotActiveException.class,
             AppIsNotAvailableException.class,
             UsernameIsNotAvailableException.class,
             EmptySecretTokenException.class

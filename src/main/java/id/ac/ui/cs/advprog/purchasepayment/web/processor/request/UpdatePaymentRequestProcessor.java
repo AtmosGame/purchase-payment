@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UpdatePaymentRequestProcessor implements RequestProcessor<UpdatePaymentRequest>{
     private Validator<UpdatePaymentRequest> validator;
     private Validator<UpdatePaymentRequest> secretTokenValidator;
-    private Validator<UpdatePaymentRequest> checkoutNotExpiredValidator;
+    private Validator<UpdatePaymentRequest> checkoutIsActiveValidator;
     private Validator<UpdatePaymentRequest> updatePaymentRequestDataValidator;
 
     @PostConstruct
     public void init() {
         secretTokenValidator.setNextValidator(updatePaymentRequestDataValidator);
-        updatePaymentRequestDataValidator.setNextValidator(checkoutNotExpiredValidator);
+        updatePaymentRequestDataValidator.setNextValidator(checkoutIsActiveValidator);
 
         validator = secretTokenValidator;
     }
@@ -38,7 +38,7 @@ public class UpdatePaymentRequestProcessor implements RequestProcessor<UpdatePay
     }
 
     @Autowired
-    public void setCheckoutNotExpiredValidator(Validator<UpdatePaymentRequest> checkoutNotExpiredValidator) {
-        this.checkoutNotExpiredValidator = checkoutNotExpiredValidator;
+    public void setCheckoutIsActiveValidator(Validator<UpdatePaymentRequest> checkoutIsActiveValidator) {
+        this.checkoutIsActiveValidator = checkoutIsActiveValidator;
     }
 }
