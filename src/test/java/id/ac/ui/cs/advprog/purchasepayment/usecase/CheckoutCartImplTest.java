@@ -1,6 +1,8 @@
 package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -11,8 +13,10 @@ import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartIsEmptyException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.models.Checkout;
+import id.ac.ui.cs.advprog.purchasepayment.models.CheckoutDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartRepository;
+import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutDetailsRepository;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +46,9 @@ class CheckoutCartImplTest {
     private Cart userCart;
     private CartDetails cartDetails;
     private CheckoutCartRequest request;
+    private CheckoutDetailsRepository checkoutDetailsRepository;
+    private CheckoutDetails checkoutDetails;
+    private DeleteCartImpl deleteCart;
 
 
     @BeforeEach
@@ -69,7 +76,77 @@ class CheckoutCartImplTest {
                 .cart(userCart)
                 .build();
 
+        checkoutDetails = CheckoutDetails.builder()
+                .id(1)
+                .appId("<app_id>")
+                .appName("<app_name>")
+                .addDate(new Date())
+                .appPrice(399399.0)
+                .checkout(userCheckout)
+                .build();
     }
+
+    @Test
+    public void testCheckoutWhenCartIsNotEmpty() {
+        // create a mock request with a non-empty cart
+        CheckoutCartRequest request = mock(CheckoutCartRequest.class);
+        when(request.getUsername()).thenReturn("username");
+        Cart cart = new Cart();
+        List<CartDetails> cartDetails = List.of(new CartDetails(1, "1", "app1", 100., new Date(), userCart));
+        cart.setCartDetails(cartDetails);
+        Optional<Cart> optionalCart = Optional.of(cart);
+        when(cartRepository.findByUsername("username")).thenReturn(optionalCart);
+
+        // create a mock Checkout object
+        LocalDateTime now = LocalDateTime.now();
+        Checkout checkout = Checkout.builder()
+                .id(1)
+                .username("username")
+                .statusPembayaran("Menunggu Pembayaran")
+                .waktuPembuatanCheckout(now)
+                .build();
+
+        // mock the repository methods to return the created objects
+        when(checkoutRepository.save(any(Checkout.class))).thenReturn(checkout);
+
+        // Fix: Initialize the mock for checkoutDetailsRepository
+        CheckoutDetailsRepository checkoutDetailsRepository = mock(CheckoutDetailsRepository.class);
+
+        // configure the save method of checkoutDetailsRepository to set the id field
+        when(checkoutDetailsRepository.save(any(CheckoutDetails.class))).thenAnswer(invocation -> {
+            CheckoutDetails savedCheckoutDetails = invocation.getArgument(0);
+            savedCheckoutDetails.setId(1); // set the id field manually
+            return savedCheckoutDetails;
+        });
+
+        // update the constructor invocation in the test setup
+        CheckoutCartImpl checkoutCartImpl = new CheckoutCartImpl(
+                cartRepository,
+                cartDetailsRepository,
+                checkoutRepository,
+                deleteCart,
+                checkoutDetailsRepository
+        );
+
+        // call the checkout method and assert the expected result
+        Checkout result = checkoutCartImpl.checkout(request);
+        assertEquals(checkout, result);
+
+        // verify that the repository methods were called with the expected arguments
+        ArgumentCaptor<Checkout> checkoutArg = ArgumentCaptor.forClass(Checkout.class);
+        verify(checkoutRepository).save(checkoutArg.capture());
+        assertEquals("username", checkoutArg.getValue().getUsername());
+        assertEquals("Menunggu Pembayaran", checkoutArg.getValue().getStatusPembayaran());
+        assertTrue(Duration.between(now, checkoutArg.getValue().getWaktuPembuatanCheckout()).getSeconds() < 1);
+
+        ArgumentCaptor<CheckoutDetails> checkoutDetailsArg = ArgumentCaptor.forClass(CheckoutDetails.class);
+        verify(checkoutDetailsRepository).save(checkoutDetailsArg.capture());
+        assertEquals(1, checkoutDetailsArg.getValue().getId()); // check the id field
+
+        // verify that the deleteByCartUsername method was called with the expected argument
+        verify(cartDetailsRepository).deleteByCartUsername("username");
+    }
+
 
 
 
