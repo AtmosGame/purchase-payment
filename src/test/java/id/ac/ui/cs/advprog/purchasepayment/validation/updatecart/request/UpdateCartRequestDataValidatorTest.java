@@ -105,4 +105,53 @@ class UpdateCartRequestDataValidatorTest {
                 .hasMessage("Request data is not valid");
     }
 
+    @Test
+    void testRequestDataValid() {
+        var monoMock = Mockito.mock(Mono.class);
+        var responseEntityMock = Mockito.mock(ResponseEntity.class);
+        var appValidationResponse = AppValidationResponse.builder()
+                .isValid(true).build();
+
+        doReturn(monoMock).when(updateCartRequestDataValidator).checkAppDataAsync(request);
+        doReturn(responseEntityMock).when(monoMock).block();
+        doReturn(appValidationResponse).when(responseEntityMock).getBody();
+
+        var result = updateCartRequestDataValidator.requestDataValid(request);
+
+        Assertions.assertThat(result).isTrue();
+    }
+
+    @Test
+    void testRequestDataValidThrowError() {
+        doThrow(NumberFormatException.class).when(updateCartRequestDataValidator).checkAppDataAsync(request);
+        var result = updateCartRequestDataValidator.requestDataValid(request);
+
+        Assertions.assertThat(result).isFalse();
+    }
+
+    @Test
+    void testResponseIsNull() {
+        var monoMock = Mockito.mock(Mono.class);
+
+        doReturn(monoMock).when(updateCartRequestDataValidator).checkAppDataAsync(request);
+        doReturn(null).when(monoMock).block();
+
+        var result = updateCartRequestDataValidator.requestDataValid(request);
+
+        Assertions.assertThat(result).isFalse();
+    }
+
+    @Test
+    void testResponseBodyIsNull() {
+        var monoMock = Mockito.mock(Mono.class);
+        var responseEntityMock = Mockito.mock(ResponseEntity.class);
+
+        doReturn(monoMock).when(updateCartRequestDataValidator).checkAppDataAsync(request);
+        doReturn(responseEntityMock).when(monoMock).block();
+        doReturn(null).when(responseEntityMock).getBody();
+
+        var result = updateCartRequestDataValidator.requestDataValid(request);
+
+        Assertions.assertThat(result).isFalse();
+    }
 }
