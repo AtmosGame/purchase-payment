@@ -31,7 +31,7 @@ public class GetCartResponse {
                 .cartDetailsData(orderDetails
                         .stream()
                         .map(CartDetailsData::fromCartDetails)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .build();
     }
 
