@@ -95,7 +95,6 @@ class PurchaseAndPaymentControllerTest {
                 .id("<app_id>")
                 .name("<app_name>")
                 .price(0.0)
-                .username("<requestor_username>")
                 .build();
 
         mockMvc.perform(put("/api/v1/cart")
