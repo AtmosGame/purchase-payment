@@ -13,4 +13,5 @@ public interface CheckoutCart {
     Checkout getCheckoutByUsername(String username);
     Optional<Cart> findCartByUsername(String username);
     boolean checkCartIsEmpty(String username);
+    Checkout getCheckoutById(Integer checkoutId);
 }
