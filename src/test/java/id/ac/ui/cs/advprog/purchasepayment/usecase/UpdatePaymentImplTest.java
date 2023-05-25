@@ -33,6 +33,8 @@ class UpdatePaymentImplTest {
     private CheckoutDetailsRepository checkoutDetailsRepository;
     @Mock
     private PurchasedAppRepository purchasedAppRepository;
+    @Mock
+    private CheckoutCart checkoutCart;
 
     private UpdatePaymentRequest request;
 
@@ -59,8 +61,7 @@ class UpdatePaymentImplTest {
                 .id(1)
                 .statusPembayaran("Success")
                 .build();
-        Optional<Checkout> checkoutExpiredOptional = Optional.of(checkoutExpired);
-        doReturn(checkoutExpiredOptional).when(checkoutRepository).findById(anyInt());
+        doReturn(checkoutExpired).when(checkoutCart).getCheckoutById(anyInt());
 
         updatePayment.updateCheckoutStatus(checkoutExpired.getId());
         Assertions.assertThat(checkoutExpired.getStatusPembayaran()).isEqualTo("Success");
@@ -73,8 +74,7 @@ class UpdatePaymentImplTest {
                 .statusPembayaran("Success")
                 .username("atmos")
                 .build();
-        Optional<Checkout> checkoutExpiredOptional = Optional.of(checkoutExpired);
-        doReturn(checkoutExpiredOptional).when(checkoutRepository).findById(anyInt());
+        doReturn(checkoutExpired).when(checkoutCart).getCheckoutById(anyInt());
 
         List<CheckoutDetails> checkoutDetailsList = new ArrayList<>();
 
@@ -92,5 +92,19 @@ class UpdatePaymentImplTest {
         updatePayment.updateUserPurchasedApps(checkoutExpired.getId());
 
         verify(purchasedAppRepository, times(checkoutDetailsList.size())).save(any());
+    }
+
+    @Test
+    void testUpdateCheckoutStatusIsNull() {
+        doReturn(null).when(checkoutCart).getCheckoutById(anyInt());
+        updatePayment.updateCheckoutStatus(Integer.valueOf(request.getId()));
+        verify(checkoutRepository, times(0)).save(any());
+    }
+
+    @Test
+    void testUpdateUserPurchasedAppsIsNull() {
+        doReturn(null).when(checkoutCart).getCheckoutById(anyInt());
+        updatePayment.updateUserPurchasedApps(Integer.valueOf(request.getId()));
+        verify(purchasedAppRepository, times(0)).save(any());
     }
 }

@@ -19,6 +19,7 @@ public class UpdatePaymentImpl implements UpdatePayment {
     private final CheckoutRepository checkoutRepository;
     private final CheckoutDetailsRepository checkoutDetailsRepository;
     private final PurchasedAppRepository purchasedAppRepository;
+    private final CheckoutCart checkoutCart;
 
     @Override
     public void update(UpdatePaymentRequest dto) {
@@ -29,7 +30,7 @@ public class UpdatePaymentImpl implements UpdatePayment {
 
     @Override
     public void updateCheckoutStatus(Integer checkoutId) {
-        var checkout = getCheckoutById(checkoutId);
+        var checkout = checkoutCart.getCheckoutById(checkoutId);
 
         if (checkout == null) {
             return;
@@ -42,7 +43,7 @@ public class UpdatePaymentImpl implements UpdatePayment {
 
     @Override
     public void updateUserPurchasedApps(Integer checkoutId) {
-        var checkout = getCheckoutById(checkoutId);
+        var checkout = checkoutCart.getCheckoutById(checkoutId);
         List<CheckoutDetails> checkoutDetails = checkoutDetailsRepository.findAllByCheckoutId(checkoutId);
 
         if (checkout == null) {
@@ -59,10 +60,5 @@ public class UpdatePaymentImpl implements UpdatePayment {
                     .build();
             purchasedAppRepository.save(purchasedApp);
         });
-    }
-
-    private Checkout getCheckoutById(Integer checkoutId) {
-        var optionalCheckout = checkoutRepository.findById(checkoutId);
-        return optionalCheckout.orElse(null);
     }
 }
