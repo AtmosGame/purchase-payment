@@ -132,9 +132,9 @@ class JwtServiceTest {
                 .compact();
     }
 
-    private String generateTokenWithUsernameAndExpiration(Date expiration) {
+    private String generateTokenWithUsernameAndExpiration(String name, Date expiration) {
         return Jwts.builder()
-                .setSubject("john")
+                .setSubject(name)
                 .setIssuedAt(new Date())
                 .setExpiration(expiration)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -166,7 +166,21 @@ class JwtServiceTest {
     @Test
     void testIsTokenValidTokenExpiredException() {
         // Arrange
-        String token = generateTokenWithUsernameAndExpiration(new Date(System.currentTimeMillis() - 1000));
+        String token = generateTokenWithUsernameAndExpiration("john", new Date(System.currentTimeMillis() - 1000));
+        UserDetails userDetails = User.builder()
+                .username("john")
+                .password("password")
+                .roles("USER")
+                .build();
+
+        // Act and Assert
+        Assertions.assertThrows(ExpiredJwtException.class, () -> jwtService.isTokenValid(token, userDetails));
+    }
+
+    @Test
+    void testIsTokenValidDifferentUsernameTokenExpiredException() {
+        // Arrange
+        String token = generateTokenWithUsernameAndExpiration("jane", new Date(System.currentTimeMillis() - 1000));
         UserDetails userDetails = User.builder()
                 .username("john")
                 .password("password")

@@ -100,19 +100,21 @@ public class CheckoutCartImpl implements CheckoutCart {
                 .orElse(true);
     }
 
-    @Scheduled(fixedRate = 10000) // Run every 10 seconds
+    @Scheduled(fixedRate = 10000)
     public void checkCheckoutTime() {
         var checkouts = checkoutRepository.findAll();
         for (Checkout checkout : checkouts) {
             LocalDateTime threeMinutesLater = checkout.getWaktuPembuatanCheckout().plusMinutes(3);
 
             if (threeMinutesLater.isBefore(LocalDateTime.now())) {
-                System.out.println("Three minutes have passed.");
                 checkout.setStatusPembayaran("Expired");
-            } else {
-                System.out.println("Three minutes have not passed yet.");
             }
             checkoutRepository.save(checkout);
         }
+    }
+    @Override
+    public Checkout getCheckoutById(Integer checkoutId) {
+        var optionalCheckout = checkoutRepository.findById(checkoutId);
+        return optionalCheckout.orElse(null);
     }
 }

@@ -11,6 +11,7 @@ sonarqube {
     properties {
         property("sonar.projectKey", "atmos-purchase-payment")
         property("sonar.organization", "atmos-purchase-payment")
+
     }
 }
 
@@ -56,7 +57,7 @@ tasks.withType<Test> {
 
 tasks.jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.map {
-        fileTree(it) { exclude("**/*Application**") }
+        fileTree(it) { exclude("**/*Application**", "**/dto/**", "**/config/**") }
     }))
     dependsOn(tasks.test) // tests are required to run before generating the report
     reports {

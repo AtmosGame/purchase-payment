@@ -11,7 +11,7 @@ public class DeleteCartImpl implements DeleteCart {
     private final CartDetailsRepository cartDetailsRepository;
 
     @Override
-    public Void deleteCartByAppId(String username, String appId) {
+    public synchronized Void deleteCartByAppId(String username, String appId) {
         // delete cartDetails by username and appId
         boolean isSuccess = cartDetailsRepository.deleteCartDetailsByCartUsernameAndAppId(username, appId) == 1;
 
