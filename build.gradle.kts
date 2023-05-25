@@ -11,6 +11,7 @@ sonarqube {
     properties {
         property("sonar.projectKey", "atmos-purchase-payment")
         property("sonar.organization", "atmos-purchase-payment")
+
     }
 }
 
