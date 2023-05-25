@@ -22,6 +22,11 @@ Fitur mengenai pembelian aplikasi dan pembayaran pada proyek Atmos (Games & Appl
 1. [Sonarcloud](https://sonarcloud.io/project/overview?id=atmos-purchase-payment)
 2. [Technical Documentation](https://drive.google.com/drive/folders/1JKYtOgqJ9fUbi6tyM-ledqqSAByglviE?usp=sharing)
 3. [Link Deploy GCP](http://34.87.96.117)
+4. Link Prometheus: http://34.87.96.117:9090/targets
+5. Link Grafana: http://34.87.96.117:3000/
+6. Creds Grafana:
+username: admin
+pass: atmos11-purchase-payment
 
 ## Use Case
 
