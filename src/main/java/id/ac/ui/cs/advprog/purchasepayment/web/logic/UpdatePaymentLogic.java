@@ -15,7 +15,7 @@ public class UpdatePaymentLogic implements PurchaseAndPaymentLogic<UpdatePayment
     @Override
     public Void processLogic(UpdatePaymentRequest request) {
         updatePaymentProcessor.validate(request);
-        updatePaymentImpl.update(request.getId());
+        updatePaymentImpl.update(request);
         return null;
     }
 }

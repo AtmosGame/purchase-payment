@@ -8,4 +8,7 @@ import java.util.Optional;
 public interface CheckoutRepository extends CrudRepository<Checkout, Integer>{
     Optional<Checkout> findByUsername(String username);
 
+    Optional<Checkout> findById(Integer id);
+
+    boolean existsById(Integer id);
 }

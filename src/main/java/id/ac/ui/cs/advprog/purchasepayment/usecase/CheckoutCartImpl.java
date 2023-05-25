@@ -45,9 +45,9 @@ public class CheckoutCartImpl implements CheckoutCart {
         Checkout userCheckoutSaved = checkoutRepository.save(userCheckout);
         List<CheckoutDetails> checkoutDetails = addCartDetailsToCheckoutDetails(cartDetails, userCheckoutSaved);
         checkoutDetailsRepository.saveAll(checkoutDetails);
-        for (CartDetails details: cartDetails){
-            deleteCart.deleteCartByAppId(request.getUsername(), details.getAppId());
-        }
+
+        cartDetailsRepository.deleteByCartUsername(request.getUsername());
+
         return userCheckoutSaved;
     }
 
