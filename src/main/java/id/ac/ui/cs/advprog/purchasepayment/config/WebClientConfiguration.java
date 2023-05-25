@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 @ComponentScan(value = "id.ac.ui.cs.advprog.purchasepayment.config")
 public class WebClientConfiguration {
     private URLProperties urlProperties;
-    private static final String BASE_URL = "http://localhost:8080";
     public static final int TIMEOUT = 2000;
 
     @Bean
