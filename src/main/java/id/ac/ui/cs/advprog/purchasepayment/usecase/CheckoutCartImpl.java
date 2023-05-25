@@ -115,4 +115,9 @@ public class CheckoutCartImpl implements CheckoutCart {
             checkoutRepository.save(checkout);
         }
     }
+    @Override
+    public Checkout getCheckoutById(Integer checkoutId) {
+        var optionalCheckout = checkoutRepository.findById(checkoutId);
+        return optionalCheckout.orElse(null);
+    }
 }
