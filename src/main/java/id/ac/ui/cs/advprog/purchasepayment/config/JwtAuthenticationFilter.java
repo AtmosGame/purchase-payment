@@ -30,7 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String JWT_TOKEN_PREFIX = "Bearer";
     private UserDetails userDetails;
 
-
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
