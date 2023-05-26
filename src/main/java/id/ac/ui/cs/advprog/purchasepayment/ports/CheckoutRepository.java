@@ -22,7 +22,7 @@ public interface CheckoutRepository extends CrudRepository<Checkout, Integer>{
                  JOIN checkout_details cd ON c.id = cd.checkout_id
         WHERE c.status_pembayaran = 'Menunggu Pembayaran'
           AND c.username = ?1
-          AND cd.appId = ?2
+          AND cd.app_id = ?2
     """, nativeQuery = true)
     boolean existsAppInUserActiveCheckout(String username, String appId);
 }
