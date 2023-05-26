@@ -87,7 +87,7 @@ class CheckoutCartImplTest {
     }
 
     @Test
-    public void testCheckoutWhenCartIsNotEmpty() {
+    void testCheckoutWhenCartIsNotEmpty() {
         // create a mock request with a non-empty cart
         CheckoutCartRequest request = mock(CheckoutCartRequest.class);
         when(request.getUsername()).thenReturn("username");
@@ -146,9 +146,6 @@ class CheckoutCartImplTest {
         // verify that the deleteByCartUsername method was called with the expected argument
         verify(cartDetailsRepository).deleteByCartUsername("username");
     }
-
-
-
 
     @Test
     void testCheckoutCartWithEmptyCart() {
