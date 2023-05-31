@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface UpdateCart {
     Cart update(UpdateCartRequest request);
-    Cart getCartByUsername(String username);
     Optional<Cart> findCartByUsername(String username);
     CartDetails addCartDetailsToCartByRequest(UpdateCartRequest request, Cart cart);
     Optional<CartDetails> findCartDetailsByCartUsernameAndAppId(String username, String appId);

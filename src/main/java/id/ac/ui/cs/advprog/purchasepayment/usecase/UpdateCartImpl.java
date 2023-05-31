@@ -26,15 +26,6 @@ public class UpdateCartImpl implements UpdateCart {
     }
 
     @Override
-    public Cart getCartByUsername(String username) {
-        Optional<Cart> optionalUserCart = findCartByUsername(username);
-        return optionalUserCart.orElseGet(() -> {
-            var userCart = Cart.builder().username(username).build();
-            return cartRepository.save(userCart);
-        });
-    }
-
-    @Override
     public Optional<Cart> findCartByUsername(String username) {
         return cartRepository.findByUsername(username);
     }
