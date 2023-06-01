@@ -27,8 +27,7 @@ public class UpdatePaymentImpl implements UpdatePayment {
         updateUserPurchasedApps(id);
     }
 
-    @Override
-    public void updateCheckoutStatus(Integer checkoutId) {
+    void updateCheckoutStatus(Integer checkoutId) {
         var checkout = checkoutCart.getCheckoutById(checkoutId);
 
         if (checkout == null) {
@@ -40,8 +39,7 @@ public class UpdatePaymentImpl implements UpdatePayment {
     }
 
 
-    @Override
-    public void updateUserPurchasedApps(Integer checkoutId) {
+    void updateUserPurchasedApps(Integer checkoutId) {
         var checkout = checkoutCart.getCheckoutById(checkoutId);
         List<CheckoutDetails> checkoutDetails = checkoutDetailsRepository.findAllByCheckoutId(checkoutId);
 
