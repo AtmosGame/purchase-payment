@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.web.logic;
 
 import id.ac.ui.cs.advprog.purchasepayment.usecase.GetCart;
-import id.ac.ui.cs.advprog.purchasepayment.web.processor.request.RequestProcessor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
