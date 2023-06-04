@@ -3,8 +3,6 @@ package id.ac.ui.cs.advprog.purchasepayment.usecase;
 import id.ac.ui.cs.advprog.purchasepayment.annotations.UseCase;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckoutCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInCartException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartDoesNotExistException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartIsEmptyException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;

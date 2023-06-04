@@ -24,5 +24,5 @@ public interface CheckoutRepository extends CrudRepository<Checkout, Integer>{
           AND c.username = ?1
           AND cd.app_id = ?2
     """, nativeQuery = true)
-    boolean existsAppInUserActiveCheckout(String username, String app_id);
+    boolean existsAppInUserActiveCheckout(String username, String appId);
 }

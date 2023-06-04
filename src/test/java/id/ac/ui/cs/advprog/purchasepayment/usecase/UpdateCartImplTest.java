@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.AppAlreadyInCartException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
@@ -68,24 +67,6 @@ class UpdateCartImplTest {
         Cart result = updateCartImpl.update(request);
         Assertions.assertThat(userCart).isEqualTo(result);
 
-    }
-
-    @Test
-    void testGetCartByUsernameWithNonEmptyOptional() {
-        Optional<Cart> expected = Optional.of(userCart);
-        doReturn(expected).when(updateCartImpl).findCartByUsername(request.getUsername());
-
-        Cart result = updateCartImpl.getCartByUsername(request.getUsername());
-        Assertions.assertThat(userCart).isEqualTo(result);
-    }
-
-    @Test
-    void testGetCartByUsernameWithEmptyOptional() {
-        Optional<Cart> expected = Optional.empty();
-        doReturn(expected).when(updateCartImpl).findCartByUsername(request.getUsername());
-
-        updateCartImpl.getCartByUsername(request.getUsername());
-        verify(cartRepository, times(1)).save(any(Cart.class));
     }
 
     @Test
