@@ -5,7 +5,6 @@ import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
-import id.ac.ui.cs.advprog.purchasepayment.ports.CartRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
@@ -13,7 +12,6 @@ import java.util.Date;
 @UseCase
 @RequiredArgsConstructor
 public class UpdateCartImpl implements UpdateCart {
-    private final CartRepository cartRepository;
     private final CartDetailsRepository cartDetailsRepository;
     private final GetCart getCart;
 
@@ -24,8 +22,7 @@ public class UpdateCartImpl implements UpdateCart {
         return userCart;
     }
 
-    @Override
-    public CartDetails addCartDetailsToCartByRequest(UpdateCartRequest request, Cart cart) {
+    CartDetails addCartDetailsToCartByRequest(UpdateCartRequest request, Cart cart) {
         var cartDetails = CartDetails.builder()
                 .appId(request.getId())
                 .appName(request.getName())

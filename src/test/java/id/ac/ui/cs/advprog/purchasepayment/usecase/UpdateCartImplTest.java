@@ -4,7 +4,6 @@ import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
-import id.ac.ui.cs.advprog.purchasepayment.ports.CartRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -25,8 +23,6 @@ class UpdateCartImplTest {
     @Spy
     @InjectMocks
     private UpdateCartImpl updateCartImpl;
-    @Mock
-    private CartRepository cartRepository;
     @Mock
     private CartDetailsRepository cartDetailsRepository;
     @Mock
