@@ -5,7 +5,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CartDetailsRepository extends CrudRepository<CartDetails, Integer> {
     List<CartDetails> findAllByCartId(Integer cartId);

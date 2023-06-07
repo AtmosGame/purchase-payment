@@ -9,7 +9,6 @@ import id.ac.ui.cs.advprog.purchasepayment.ports.CartRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
-import java.util.Optional;
 
 @UseCase
 @RequiredArgsConstructor
