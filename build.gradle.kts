@@ -11,6 +11,7 @@ sonarqube {
     properties {
         property("sonar.projectKey", "atmos-purchase-payment")
         property("sonar.organization", "atmos-purchase-payment")
+        property ("sonar.host.url", "https://sonarcloud.io")
 
     }
 }
@@ -59,10 +60,9 @@ tasks.jacocoTestReport {
     classDirectories.setFrom(files(classDirectories.files.map {
         fileTree(it) { exclude("**/*Application**", "**/dto/**", "**/config/**") }
     }))
-    dependsOn(tasks.test) // tests are required to run before generating the report
+//    dependsOn(tasks.test) // tests are required to run before generating the report
     reports {
-        xml.required.set(false)
+        xml.required.set(true)
         csv.required.set(false)
-        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
     }
 }
