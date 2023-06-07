@@ -4,7 +4,6 @@ import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
-import id.ac.ui.cs.advprog.purchasepayment.ports.CartRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -25,8 +23,6 @@ class UpdateCartImplTest {
     @Spy
     @InjectMocks
     private UpdateCartImpl updateCartImpl;
-    @Mock
-    private CartRepository cartRepository;
     @Mock
     private CartDetailsRepository cartDetailsRepository;
     @Mock
@@ -70,30 +66,11 @@ class UpdateCartImplTest {
     }
 
     @Test
-    void testFindCartByUsernameWithNonEmptyOptional() {
-        Optional<Cart> expected = Optional.of(userCart);
-        when(cartRepository.findByUsername(request.getUsername())).thenReturn(expected);
-
-        Optional<Cart> result = updateCartImpl.findCartByUsername(request.getUsername());
-        Assertions.assertThat(expected).isEqualTo(result);
-    }
-
-    @Test
     void testAddCartDetailsToCartByRequestWhenAppIsNotInCart() {
         when(cartDetailsRepository.save(any(CartDetails.class))).thenReturn(cartDetails);
         CartDetails result = updateCartImpl.addCartDetailsToCartByRequest(request, userCart);
 
         verify(cartDetailsRepository, times(1)).save(any(CartDetails.class));
         Assertions.assertThat(cartDetails).isEqualTo(result);
-    }
-
-    @Test
-    void testFindCartDetailsByCartUsernameAndAppId() {
-        Optional<CartDetails> expected = Optional.of(cartDetails);
-        when(cartDetailsRepository.findByCartUsernameAndAppId(request.getUsername(), request.getId()))
-                .thenReturn(expected);
-
-        Optional<CartDetails> result = updateCartImpl.findCartDetailsByCartUsernameAndAppId(request.getUsername(), request.getId());
-        Assertions.assertThat(expected).isEqualTo(result);
     }
 }

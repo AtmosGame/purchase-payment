@@ -5,16 +5,13 @@ import id.ac.ui.cs.advprog.purchasepayment.dto.UpdateCartRequest;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
-import id.ac.ui.cs.advprog.purchasepayment.ports.CartRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
-import java.util.Optional;
 
 @UseCase
 @RequiredArgsConstructor
 public class UpdateCartImpl implements UpdateCart {
-    private final CartRepository cartRepository;
     private final CartDetailsRepository cartDetailsRepository;
     private final GetCart getCart;
 
@@ -25,13 +22,7 @@ public class UpdateCartImpl implements UpdateCart {
         return userCart;
     }
 
-    @Override
-    public Optional<Cart> findCartByUsername(String username) {
-        return cartRepository.findByUsername(username);
-    }
-
-    @Override
-    public CartDetails addCartDetailsToCartByRequest(UpdateCartRequest request, Cart cart) {
+    CartDetails addCartDetailsToCartByRequest(UpdateCartRequest request, Cart cart) {
         var cartDetails = CartDetails.builder()
                 .appId(request.getId())
                 .appName(request.getName())
@@ -40,10 +31,5 @@ public class UpdateCartImpl implements UpdateCart {
                 .cart(cart)
                 .build();
         return cartDetailsRepository.save(cartDetails);
-    }
-
-    @Override
-    public Optional<CartDetails> findCartDetailsByCartUsernameAndAppId(String username, String appId) {
-        return cartDetailsRepository.findByCartUsernameAndAppId(username, appId);
     }
 }
