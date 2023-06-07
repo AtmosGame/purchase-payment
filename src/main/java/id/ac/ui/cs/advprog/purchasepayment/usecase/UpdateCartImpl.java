@@ -26,11 +26,6 @@ public class UpdateCartImpl implements UpdateCart {
     }
 
     @Override
-    public Optional<Cart> findCartByUsername(String username) {
-        return cartRepository.findByUsername(username);
-    }
-
-    @Override
     public CartDetails addCartDetailsToCartByRequest(UpdateCartRequest request, Cart cart) {
         var cartDetails = CartDetails.builder()
                 .appId(request.getId())
@@ -40,10 +35,5 @@ public class UpdateCartImpl implements UpdateCart {
                 .cart(cart)
                 .build();
         return cartDetailsRepository.save(cartDetails);
-    }
-
-    @Override
-    public Optional<CartDetails> findCartDetailsByCartUsernameAndAppId(String username, String appId) {
-        return cartDetailsRepository.findByCartUsernameAndAppId(username, appId);
     }
 }
