@@ -9,9 +9,6 @@ import java.util.Optional;
 
 public interface CartDetailsRepository extends CrudRepository<CartDetails, Integer> {
     List<CartDetails> findAllByCartId(Integer cartId);
-    List<CartDetails> findByCartUsername(String username);
-    Optional<CartDetails> findByCartUsernameAndAppId(String username, String appId);
-
     boolean existsByCartUsernameAndAppId(String username, String appId);
     @Transactional
     void deleteByCartUsername(String username);
