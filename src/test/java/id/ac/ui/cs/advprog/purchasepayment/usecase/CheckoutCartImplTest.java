@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckoutCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartDoesNotExistException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartIsEmptyException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
@@ -18,7 +16,6 @@ import id.ac.ui.cs.advprog.purchasepayment.ports.CartDetailsRepository;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CartRepository;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutDetailsRepository;
 import id.ac.ui.cs.advprog.purchasepayment.ports.CheckoutRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -34,9 +31,6 @@ class CheckoutCartImplTest {
     @InjectMocks
     private CheckoutCartImpl checkoutCartImpl;
 
-    @Spy
-    @InjectMocks
-    private GetCartImpl getCartImpl;
     @Mock
     private CartRepository cartRepository;
     @Mock
@@ -46,9 +40,7 @@ class CheckoutCartImplTest {
     private Cart userCart;
     private CartDetails cartDetails;
     private CheckoutCartRequest request;
-    private CheckoutDetailsRepository checkoutDetailsRepository;
     private CheckoutDetails checkoutDetails;
-    private DeleteCartImpl deleteCart;
 
 
     @BeforeEach
@@ -124,7 +116,6 @@ class CheckoutCartImplTest {
                 cartRepository,
                 cartDetailsRepository,
                 checkoutRepository,
-                deleteCart,
                 checkoutDetailsRepository
         );
 
@@ -215,57 +206,30 @@ class CheckoutCartImplTest {
     }
 
     @Test
-    void getCheckoutByUsername_existingCheckout_returnsCheckout() {
-        String username = "testuser";
-        Checkout expected = Checkout.builder().username(username).build();
-        when(checkoutRepository.findByUsername(username)).thenReturn(Optional.of(expected));
+    void testValidCheckoutIdReturnsCheckout() {
+        // Arrange
+        Integer checkoutId = 1;
+        Checkout expectedCheckout = new Checkout();
+        Mockito.when(checkoutRepository.findById(checkoutId)).thenReturn(Optional.of(expectedCheckout));
 
-        Checkout actual = checkoutCartImpl.getCheckoutByUsername(username);
+        // Act
+        Checkout actualCheckout = checkoutCartImpl.getCheckoutById(checkoutId);
 
-        assertEquals(expected, actual);
+        // Assert
+        assertEquals(expectedCheckout, actualCheckout);
     }
 
     @Test
-    void getCheckoutByUsername_newCheckout_returnsSavedCheckout() {
-        String username = "testuser";
-        Checkout expected = Checkout.builder().username(username).build();
-        when(checkoutRepository.findByUsername(username)).thenReturn(Optional.empty());
-        when(checkoutRepository.save(expected)).thenReturn(expected);
+    void testInvalidCheckoutIdReturnsNull() {
+        // Arrange
+        Integer checkoutId = 100;
+        Mockito.when(checkoutRepository.findById(checkoutId)).thenReturn(Optional.empty());
 
-        Checkout actual = checkoutCartImpl.getCheckoutByUsername(username);
+        // Act
+        Checkout actualCheckout = checkoutCartImpl.getCheckoutById(checkoutId);
 
-        assertEquals(expected, actual);
+        // Assert
+        assertNull(actualCheckout);
     }
 
-    @Test
-    void testFindByUsernameAndFoundShouldReturnCart() {
-        // arrange
-        List<CartDetails> userCartDetails = List.of(cartDetails);
-        when(cartRepository.findByUsername(username))
-                .thenReturn(Optional.of(userCart));
-        when(cartDetailsRepository.findAllByCartId(userCart.getId()))
-                .thenReturn(userCartDetails);
-
-        // act
-        GetCartResponse response = checkoutCartImpl.getCartByUsername(username);
-
-        // assert
-        verify(cartRepository, atLeastOnce())
-                .findByUsername(any(String.class));
-        verify(cartDetailsRepository, atLeastOnce())
-                .findAllByCartId(any(Integer.class));
-        GetCartResponse expectedResponse = GetCartResponse.fromCart(userCart, userCartDetails);
-        Assertions.assertThat(response).isEqualTo(expectedResponse);
-    }
-
-    @Test
-    void testFindCartByUsernameAndNotFoundShouldThrowException() {
-        when(cartRepository.findByUsername(any(String.class)))
-                .thenReturn(Optional.empty());
-
-        String invalidUsernam = "<invalid_username>";
-        Assertions.assertThatThrownBy(() -> checkoutCartImpl.getCartByUsername(invalidUsernam))
-                .isInstanceOf(CartDoesNotExistException.class)
-                .hasMessageContaining("Cart with username " + invalidUsernam + " does not exist");
-    }
 }
