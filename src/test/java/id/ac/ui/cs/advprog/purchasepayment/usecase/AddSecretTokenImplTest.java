@@ -49,7 +49,6 @@ class AddSecretTokenImplTest {
 
     @Test
     void testAddSecretTokenByRequestTokenAlreadyExist() {
-        // Arrange
         AddSecretTokenRequest request = AddSecretTokenRequest.builder()
                 .tokenName("secret-token")
                 .build();
@@ -57,7 +56,6 @@ class AddSecretTokenImplTest {
         when(secretTokenRepository.existsByTokenName(request.getTokenName()))
                 .thenReturn(true);
 
-        // Act & Assert
         assertThrows(TokenAlreadyExistException.class,
                 () -> addSecretToken.addSecretTokenByRequest(request));
 

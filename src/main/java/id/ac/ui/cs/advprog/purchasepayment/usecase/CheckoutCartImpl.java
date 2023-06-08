@@ -2,8 +2,6 @@ package id.ac.ui.cs.advprog.purchasepayment.usecase;
 
 import id.ac.ui.cs.advprog.purchasepayment.annotations.UseCase;
 import id.ac.ui.cs.advprog.purchasepayment.dto.CheckoutCartRequest;
-import id.ac.ui.cs.advprog.purchasepayment.dto.GetCartResponse;
-import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartDoesNotExistException;
 import id.ac.ui.cs.advprog.purchasepayment.exceptions.CartIsEmptyException;
 import id.ac.ui.cs.advprog.purchasepayment.models.Cart;
 import id.ac.ui.cs.advprog.purchasepayment.models.CartDetails;
@@ -28,7 +26,6 @@ public class CheckoutCartImpl implements CheckoutCart {
     private final CartRepository cartRepository;
     private final CartDetailsRepository cartDetailsRepository;
     private final CheckoutRepository checkoutRepository;
-    private final DeleteCart deleteCart;
     private final CheckoutDetailsRepository checkoutDetailsRepository;
 
     @Override
@@ -49,7 +46,7 @@ public class CheckoutCartImpl implements CheckoutCart {
         return userCheckoutSaved;
     }
 
-    public List<CheckoutDetails> addCartDetailsToCheckoutDetails(List<CartDetails> request, Checkout checkout) {
+    private List<CheckoutDetails> addCartDetailsToCheckoutDetails(List<CartDetails> request, Checkout checkout) {
         List<CheckoutDetails> checkoutDetailsList = new ArrayList<>();
         for (CartDetails details: request){
             var checkoutDetails = CheckoutDetails.builder()
@@ -65,33 +62,11 @@ public class CheckoutCartImpl implements CheckoutCart {
         return checkoutDetailsList;
     }
 
-    @Override
-    public GetCartResponse getCartByUsername(String username) {
-        var cart = cartRepository.findByUsername(username).orElse(null);
-
-        if (cart == null) {
-            throw new CartDoesNotExistException(username);
-        }
-
-        List<CartDetails> cartDetails = cartDetailsRepository.findAllByCartId(cart.getId());
-        return GetCartResponse.fromCart(cart, cartDetails);
-    }
-
-    @Override
-    public Checkout getCheckoutByUsername(String username) {
-        Optional<Checkout> optionalUserCheckout = checkoutRepository.findByUsername(username);
-        return optionalUserCheckout.orElseGet(() -> {
-            var userCheckout = Checkout.builder().username(username).build();
-            return checkoutRepository.save(userCheckout);
-        });
-    }
-
-    @Override
-    public Optional<Cart> findCartByUsername(String username) {
+    private Optional<Cart> findCartByUsername(String username) {
         return cartRepository.findByUsername(username);
     }
 
-    public boolean checkCartIsEmpty(String username) {
+    private boolean checkCartIsEmpty(String username) {
         return findCartByUsername(username)
                 .map(Cart::getCartDetails)
                 .map(List::isEmpty)
